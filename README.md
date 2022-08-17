@@ -1,2 +1,2 @@
 # Jetpack-compose-repository
-Jetpack-compose-공부용
+Jetpack-compose-프로젝트
