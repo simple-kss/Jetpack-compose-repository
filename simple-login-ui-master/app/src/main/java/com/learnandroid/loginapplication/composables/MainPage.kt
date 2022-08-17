@@ -1,9 +1,6 @@
 package com.learnandroid.loginapplication.composables
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,25 +11,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
-import com.learnandroid.loginapplication.R
-import com.learnandroid.loginapplication.ui.theme.primaryColor
+import com.learnandroid.loginapplication.MainViewModel
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun MainPage(navController: NavController) {
 //    val image = imageResource(id = R.drawable.login_image)
+
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
@@ -40,34 +31,92 @@ fun MainPage(navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(whiteBackground),
+        contentAlignment = Alignment.Center
+    ) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White), contentAlignment = Alignment.TopCenter
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(30.dp))
         ) {
-            Text(text = "홍길동님 안녕하세요.")
-            // Box Column Text Spacer button
-
-            Button(
-                onClick = {},
-                modifier = Modifier.wrapContentSize()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxHeight(0.90f),
             ) {
-                Text(text = "마이페이지")
-            }
-
-            Button(
-                onClick = {},
-                modifier = Modifier.wrapContentSize()
-            ) {
-                Text(text = "커뮤니티")
-            }
-
-            Button(
-                onClick = {},
-                modifier = Modifier.wrapContentSize()
-            ) {
-                Text(text = "구직정보")
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.80f)
+                        .height(50.dp),
+                    text = "홍길동님 안녕하세요.",
+                    color = Color.Black,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                // Box Column Text Spacer button
+                Button(
+                    onClick = {
+                        navController.navigate("mypage_page")
+                    },
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .fillMaxWidth(0.80f)
+                        .height(100.dp),
+                    shape = RoundedCornerShape(25),
+                ) {
+                    Text(
+                        text = "마이페이지",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        textAlign = TextAlign.Left,
+                        fontSize = 30.sp,
+                    )
+                }
+                Spacer(modifier = Modifier.padding(20.dp))
+                Button(
+                    onClick = {
+                        navController.navigate("community_page")
+                    },
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .fillMaxWidth(0.80f)
+                        .height(100.dp),
+                    shape = RoundedCornerShape(25),
+                ) {
+                    Text(
+                        text = "커뮤니티",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        textAlign = TextAlign.Left,
+                        fontSize = 30.sp,
+                    )
+                }
+                Spacer(modifier = Modifier.padding(20.dp))
+                Button(
+                    onClick = {
+                        navController.navigate("job_search_info_page")
+                    },
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .fillMaxWidth(0.80f)
+                        .height(100.dp),
+                    shape = RoundedCornerShape(25),
+                ) {
+                    Text(
+                        text = "구직정보",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        textAlign = TextAlign.Left,
+                        fontSize = 30.sp,
+                    )
+                }
             }
         }
     }

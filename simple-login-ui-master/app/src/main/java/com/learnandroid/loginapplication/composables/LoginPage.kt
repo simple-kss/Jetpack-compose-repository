@@ -1,7 +1,7 @@
 package com.learnandroid.loginapplication.composables
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -24,17 +25,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
-
 @Composable
 fun LoginPage(navController: NavController) {
-
-    val image = imageResource(id = R.drawable.login_image)
+//    val image = ImageBitmap.imageResource(id = R.drawable.login_image)
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
@@ -42,14 +41,20 @@ fun LoginPage(navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White), contentAlignment = Alignment.TopCenter
         ) {
-
-            Image(image)
+            Image(
+                painterResource(id = R.drawable.login_image),
+                contentDescription = "",
+            )
         }
 
         Column(
@@ -58,19 +63,19 @@ fun LoginPage(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.60f)
-                .clip(RoundedCornerShape(topLeft = 30.dp, topRight = 30.dp))
+                .clip(RoundedCornerShape(30.dp))
                 .background(whiteBackground)
                 .padding(10.dp)
         ) {
 
-            ScrollableColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "로그인",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = TextUnit.Companion.Sp(2)
+                        letterSpacing = 2.sp
                     ),
-                    fontSize = TextUnit.Companion.Sp(30),
+                    fontSize = 30.sp,
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -94,7 +99,9 @@ fun LoginPage(navController: NavController) {
                                 passwordVisibility.value = !passwordVisibility.value
                             }) {
                                 Icon(
-                                    imageVector = vectorResource(id = R.drawable.password_eye),
+                                    // vectorResource deprecated
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.password_eye),
+                                    String = "1",
                                     tint = if (passwordVisibility.value) primaryColor else Color.Gray
                                 )
                             }
@@ -110,24 +117,29 @@ fun LoginPage(navController: NavController) {
                         onImeActionPerformed = { _, controller ->
                             controller?.hideSoftwareKeyboard()
                         }
-
                     )
 
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(
                         // 내가 추가한 부분
                         onClick = {
-                            navController.navigate("main_page") {
-                                popUpTo = navController.graph.startDestination
-                                launchSingleTop = true
-                            }
+                            navController.navigate("main_page")
+//                            if (passwordValue.value == "1234" &&
+//                                    emailValue.value == "12.com") {
+//                                navController.navigate("main_page") {
+//                                    popUpTo = navController.graph.startDestination
+//                                    launchSingleTop = true
+//                                }
+//                            }
+                            Log.d("OLIVER486", "value : " + passwordValue.value);
+                            Log.d("OLIVER486", "value : " + emailValue.value);
                         },
                         shape = RoundedCornerShape(25),
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .height(50.dp)
                     ) {
-                        Text(text = "로그인", fontSize = TextUnit.Companion.Sp(20))
+                        Text(text = "로그인", fontSize = 20.sp)
                     }
 
                     Spacer(modifier = Modifier.padding(20.dp))
@@ -135,37 +147,15 @@ fun LoginPage(navController: NavController) {
                         text = "계정 생성",
                         modifier = Modifier.clickable(onClick = {
                             navController.navigate("register_page"){
-                                popUpTo = navController.graph.startDestination
-                                launchSingleTop = true
                             }
                         })
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
                 }
-
-
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
