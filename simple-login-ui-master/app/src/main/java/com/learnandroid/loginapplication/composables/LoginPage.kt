@@ -6,7 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,8 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +46,8 @@ fun LoginPage(navController: NavController) {
 
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+
+    val focusManager = LocalFocusManager.current
 
     Box(
         modifier = Modifier
@@ -86,9 +94,11 @@ fun LoginPage(navController: NavController) {
                         placeholder = { Text(text = "Email Address") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
-                        onImeActionPerformed = { _, _ ->
-                            focusRequester.requestFocus()
-                        }
+                        // onImeActionPerformed is deprecated
+//                        onImeActionPerformed = { _, _ ->
+//                            focusRequester.requestFocus()
+//                        }
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     )
 
                     OutlinedTextField(
@@ -99,10 +109,13 @@ fun LoginPage(navController: NavController) {
                                 passwordVisibility.value = !passwordVisibility.value
                             }) {
                                 Icon(
+                                    imageVector = Icons.Rounded.Clear,
+//                                    ImageBitmap = ImageBitmap
+//                                        .imageResource(id = R.drawable.password_eye),
+                                    contentDescription = "Clear"
                                     // vectorResource deprecated
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.password_eye),
-                                    String = "1",
-                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
+//                                    imageVector = ImageVector.vectorResource(id = R.drawable.password_eye),
+//                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
                                 )
                             }
                         },
@@ -114,9 +127,10 @@ fun LoginPage(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .focusRequester(focusRequester = focusRequester),
-                        onImeActionPerformed = { _, controller ->
-                            controller?.hideSoftwareKeyboard()
-                        }
+//                        onImeActionPerformed = { _, controller ->
+//                            controller?.hideSoftwareKeyboard()
+//                        }
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     )
 
                     Spacer(modifier = Modifier.padding(10.dp))

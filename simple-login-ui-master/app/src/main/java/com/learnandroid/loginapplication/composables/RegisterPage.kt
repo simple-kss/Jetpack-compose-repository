@@ -1,13 +1,14 @@
 package com.learnandroid.loginapplication.composables
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,7 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,8 +27,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
@@ -33,7 +36,7 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 @Composable
 fun RegisterPage(navController: NavController) {
 
-    val image = imageResource(id = R.drawable.register_page)
+//    val image = imageResource(id = R.drawable.register_page)
 
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
@@ -51,30 +54,26 @@ fun RegisterPage(navController: NavController) {
                 .background(Color.White),
             contentAlignment = Alignment.TopCenter
         ) {
-            Image(image)
+            Image(
+                painterResource(id = R.drawable.register_page),
+                contentDescription = "",
+            )
         }
-
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.70f)
-                .clip(RoundedCornerShape(topLeft = 30.dp, topRight = 30.dp))
                 .background(whiteBackground)
-                .padding(10.dp),
+                .clip(RoundedCornerShape(30.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            ScrollableColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
                 Text(
-                    text = "Sign Up", fontSize = TextUnit.Sp(30),
+                    text = "Sign Up", fontSize = 30.sp,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = TextUnit.Companion.Sp(2)
+                        letterSpacing = 2.sp
                     )
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -119,8 +118,10 @@ fun RegisterPage(navController: NavController) {
                                 passwordVisibility.value = !passwordVisibility.value
                             }) {
                                 Icon(
-                                    imageVector = vectorResource(id = R.drawable.password_eye),
-                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "Clear"
+//                                    imageVector = ImageVector.vectorResource(id = R.drawable.password_eye),
+//                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
                                 )
                             }
                         },
@@ -140,8 +141,10 @@ fun RegisterPage(navController: NavController) {
                                 confirmPasswordVisibility.value = !confirmPasswordVisibility.value
                             }) {
                                 Icon(
-                                    imageVector = vectorResource(id = R.drawable.password_eye),
-                                    tint = if (confirmPasswordVisibility.value) primaryColor else Color.Gray
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "Clear"
+//                                    imageVector = ImageVector.vectorResource(id = R.drawable.password_eye),
+//                                    tint = if (confirmPasswordVisibility.value) primaryColor else Color.Gray
                                 )
                             }
                         },
@@ -152,23 +155,19 @@ fun RegisterPage(navController: NavController) {
                     Button(onClick = { }, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {
-                        Text(text = "Sign Up", fontSize = TextUnit.Companion.Sp(20))
+                        Text(text = "Sign Up", fontSize = 20.sp)
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
                         text = "Login Instead",
                         modifier = Modifier.clickable(onClick = {
                             navController.navigate("login_page"){
-                                popUpTo = navController.graph.startDestination
                                 launchSingleTop = true
                             }
                         })
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
-
                 }
-
-            }
         }
     }
 }
