@@ -37,6 +37,10 @@ import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
+
+// 처음 앱을 킬때, 등장하게되는 화면입니다.
+// 이 화면은 MainActivity에서 기본적으로 실행하게 됩니다.
+
 @Composable
 fun LoginPage(navController: NavController) {
 //    val image = ImageBitmap.imageResource(id = R.drawable.login_image)

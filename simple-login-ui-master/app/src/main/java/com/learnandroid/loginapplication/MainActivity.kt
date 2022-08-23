@@ -12,6 +12,10 @@ import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.composables.*
 import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 
+// 앱이 실행하자마자, 시작하는 프로세스가 MainAcitivity입니다.
+// 이 액티비티는 생성할 때, LoginApplication을 만드는데,
+// LoginApplication은 startDestination (처음시작화면)으로 login_page로 지정해놓았습니다.
+// 그 이유는, 처음 시작할 때, 사용자가 로그인화면부터 보여주어야하기 때문입니다.
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -29,39 +33,20 @@ class MainActivity : AppCompatActivity() {
     fun LoginApplication(mainViewModel: MainViewModel){
         val navController = rememberNavController()
 
+        // NavHost는 화면을 어디로 이동할지를 설정하는 키워드
+        // navController는 화면 처리기입니다.
+        // 미리, 이 navController가 route(문자열로되어있음)에 대응하여 어떤화면을 뿌릴지 정의해놓습니다.
         NavHost(navController = navController, startDestination = "login_page", builder = {
+            // composable 명령어로 페이지들을 셋팅합니다.
             composable("login_page", content = { LoginPage(navController = navController) })
             composable("register_page", content = { RegisterPage(navController = navController) })
-            composable("main_page", content = { MainPage(
-                navController = navController
-            ) })
-
+            composable("main_page", content = { MainPage(navController = navController) })
             composable("job_search_info_page", content = { JobSearchInfo(navController = navController
                 , mainViewModel = mainViewModel) })
             composable("community_page", content = { CommunityPage(navController = navController) })
             composable("mypage_page", content = { MyPage(navController = navController) })
+            composable("certificate_search", content = { CertificateSearch(navController = navController)})
         })
     }
 }
-//
-//class MyViewmodel : ViewModel() {
-//    // state
-//    var text by
-//
-//
-//
-//    mutableStateOf("")
-//    var password by mutableStateOf("")
-//
-//    // events
-//    fun onTextChanged(newString:String) {
-//        text = newString
-//    }
-//
-//    fun onPasswordChanged(newString:String) {
-//        password = newString
-//    }
-//
-//}
-
 

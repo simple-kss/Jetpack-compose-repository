@@ -9,4 +9,7 @@ val teal200 = Color(0xFF03DAC5)
 
 val primaryColor = Color(0xFF00a9ea)
 val whiteBackground = Color(0xFFFFFFFF)
+
+val uGray = Color(0xFFE8E8E8)
+val uGray1 = Color(0xFFC0C0C0)
 //val whiteBackground = Color(0xFFF7F7F7)

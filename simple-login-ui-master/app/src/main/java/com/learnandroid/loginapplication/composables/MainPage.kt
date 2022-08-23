@@ -23,8 +23,6 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 @Composable
 fun MainPage(navController: NavController) {
 //    val image = imageResource(id = R.drawable.login_image)
-
-
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
 

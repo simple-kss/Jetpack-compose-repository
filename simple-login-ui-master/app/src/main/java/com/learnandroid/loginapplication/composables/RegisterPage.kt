@@ -35,9 +35,7 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun RegisterPage(navController: NavController) {
-
 //    val image = imageResource(id = R.drawable.register_page)
-
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
     val phoneValue = remember { mutableStateOf("") }
