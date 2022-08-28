@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.composables.*
+import com.learnandroid.loginapplication.composables.JobSearch.ListItem
+import com.learnandroid.loginapplication.composables.JobSearch.ListRecyclerView
 import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 
 // 앱이 실행하자마자, 시작하는 프로세스가 MainAcitivity입니다.
@@ -41,8 +43,9 @@ class MainActivity : AppCompatActivity() {
             composable("login_page", content = { LoginPage(navController = navController) })
             composable("register_page", content = { RegisterPage(navController = navController) })
             composable("main_page", content = { MainPage(navController = navController) })
-            composable("job_search_info_page", content = { JobSearchInfo(navController = navController
-                , mainViewModel = mainViewModel) })
+            composable("job_search_info_page", content = { ListRecyclerView(navController = navController)})
+//            composable("job_search_info_page", content = { JobSearchInfo(navController = navController
+//                , mainViewModel = mainViewModel) })
             composable("community_page", content = { CommunityPage(navController = navController) })
             composable("mypage_page", content = { MyPage(navController = navController) })
             composable("certificate_search", content = { CertificateSearch(navController = navController)})
