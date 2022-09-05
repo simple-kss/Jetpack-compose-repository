@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var loginManager : LoginManager = LoginManager()
+        loginManager.write_test()
+        loginManager.read_test()
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
             LoginApplicationTheme {

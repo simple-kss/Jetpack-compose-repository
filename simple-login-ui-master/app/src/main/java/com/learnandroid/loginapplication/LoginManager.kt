@@ -51,7 +51,7 @@ class LoginManager {
     }
     public fun read_test() {
         // 데이터 읽기
-        firestore.collection("members")
+        firestore.collection("users")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
