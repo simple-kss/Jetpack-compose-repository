@@ -8,6 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+// compose_version = '1.1.0-beta01'
+// https://github.com/foxandroid/RecyclerViewJCYTT/blob/master/app/src/main/java/com/example/recyclerviewjcytt/MainActivity.kt
+// https://www.youtube.com/watch?v=q7qHRnzcfEQ&ab_channel=Foxandroid
+// 출처
 @Composable
 fun ListRecyclerView(names : List<String> = List(1000) {"$it"}, navController: NavController) {
     LazyColumn(

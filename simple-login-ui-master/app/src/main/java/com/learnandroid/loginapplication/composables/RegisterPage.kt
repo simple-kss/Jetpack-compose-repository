@@ -2,6 +2,7 @@ package com.learnandroid.loginapplication.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,12 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
+import com.learnandroid.loginapplication.ui.theme.uGray
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
@@ -82,7 +86,12 @@ fun RegisterPage(navController: NavController) {
                         label = { Text(text = "Name") },
                         placeholder = { Text(text = "Name") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f)
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .border(
+                                width = 1.dp,
+                                color = uGray
+                            )
                     )
 
                     OutlinedTextField(
@@ -91,7 +100,12 @@ fun RegisterPage(navController: NavController) {
                         label = { Text(text = "Email Address") },
                         placeholder = { Text(text = "Email Address") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f)
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .border(
+                                width = 1.dp,
+                                color = uGray
+                            )
                     )
 
                     OutlinedTextField(
@@ -100,8 +114,13 @@ fun RegisterPage(navController: NavController) {
                         label = { Text(text = "Phone Number") },
                         placeholder = { Text(text = "Phone Number") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .border(
+                                width = 1.dp,
+                                color = uGray
+                            ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     )
 
                     OutlinedTextField(
@@ -110,7 +129,12 @@ fun RegisterPage(navController: NavController) {
                         label = { Text(text = "Password") },
                         placeholder = { Text(text = "Password") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .border(
+                                width = 1.dp,
+                                color = uGray
+                            ),
                         trailingIcon = {
                             IconButton(onClick = {
                                 passwordVisibility.value = !passwordVisibility.value
@@ -133,7 +157,12 @@ fun RegisterPage(navController: NavController) {
                         label = { Text(text = "Confirm Password") },
                         placeholder = { Text(text = "Confirm Password") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .border(
+                                width = 1.dp,
+                                color = uGray
+                            ),
                         trailingIcon = {
                             IconButton(onClick = {
                                 confirmPasswordVisibility.value = !confirmPasswordVisibility.value
@@ -153,7 +182,7 @@ fun RegisterPage(navController: NavController) {
                     Button(onClick = { }, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {
-                        Text(text = "Sign Up", fontSize = 20.sp)
+                        Text(text = "회원가입 신청", fontSize = 20.sp)
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
@@ -170,23 +199,8 @@ fun RegisterPage(navController: NavController) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@Composable
+@Preview
+fun RegisterPagePreview() {
+    RegisterPage(rememberNavController());
+}
