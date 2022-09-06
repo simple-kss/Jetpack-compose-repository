@@ -1,6 +1,7 @@
 package com.learnandroid.loginapplication.composables
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.learnandroid.loginapplication.LoginManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
@@ -43,6 +46,7 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun LoginPage(navController: NavController) {
+    val context = LocalContext.current
 //    val image = ImageBitmap.imageResource(id = R.drawable.login_image)
 
     val emailValue = remember { mutableStateOf("") }
@@ -141,14 +145,23 @@ fun LoginPage(navController: NavController) {
                     Button(
                         // 내가 추가한 부분
                         onClick = {
-                            navController.navigate("main_page")
-//                            if (passwordValue.value == "1234" &&
-//                                    emailValue.value == "12.com") {
-//                                navController.navigate("main_page") {
-//                                    popUpTo = navController.graph.startDestination
-//                                    launchSingleTop = true
-//                                }
-//                            }
+                            // auth가 됐다면, main페이지로 가게끔해야한다.
+                            LoginManager.auth?.signInWithEmailAndPassword(emailValue.value,
+                                passwordValue.value)
+                                ?.addOnCompleteListener { task ->
+                                    if(task.isSuccessful) {
+                                        // Login, 아이디와 패스워드가 맞았을 때
+                                        Toast.makeText(context, "로그인 완료",
+                                            Toast.LENGTH_LONG).show()
+                                        navController.navigate("main_page")
+                                    } else {
+                                        // Show the error message, 아이디와 패스워드가 틀렸을 때
+                                        Toast.makeText(context, "로그인 실패. 이유: " +
+                                                task.exception?.message,
+                                            Toast.LENGTH_LONG).show()
+                                    }
+                                }
+
                             Log.d("OLIVER486", "value : " + passwordValue.value);
                             Log.d("OLIVER486", "value : " + emailValue.value);
                         },

@@ -1,5 +1,7 @@
 package com.learnandroid.loginapplication.composables
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.learnandroid.loginapplication.LoginManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.uGray
@@ -39,6 +43,7 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun RegisterPage(navController: NavController) {
+    val context = LocalContext.current
 //    val image = imageResource(id = R.drawable.register_page)
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
@@ -179,7 +184,42 @@ fun RegisterPage(navController: NavController) {
                         else PasswordVisualTransformation()
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Button(onClick = { }, modifier = Modifier
+                    Button(onClick = {
+                        Toast.makeText(context, "Button 클릭",
+                            Toast.LENGTH_LONG).show()
+                        // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
+                        
+                        // 새로 계정 만들기
+                        LoginManager.auth?.createUserWithEmailAndPassword(emailValue.value,
+                            confirmPasswordValue.value)
+                            ?.addOnCompleteListener { task ->
+                                if(task.isSuccessful) {
+                                    // Login, 아이디와 패스워드가 맞았을 때
+                                    Toast.makeText(context, "계정 생성 완료",
+                                        Toast.LENGTH_LONG).show()
+                                } else {
+                                    // Show the error message, 아이디와 패스워드가 틀렸을 때
+                                    Toast.makeText(context, task.exception?.message,
+                                        Toast.LENGTH_LONG).show()
+                                }
+                            }
+//                                (this) { task ->
+//                                    if (task.isSuccessful) {
+//                                        Toast.makeText(
+//                                            this, "계정 생성 완료.",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                        finish() // 가입창 종료
+//                                    } else {
+//                                        Toast.makeText(
+//                                            this, "계정 생성 실패",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                    }
+//                                }
+//                        LoginManager.register(emailValue.value, nameValue.value, phoneValue.value,
+//                            confirmPasswordValue.value)
+                    }, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {
                         Text(text = "회원가입 신청", fontSize = 20.sp)
