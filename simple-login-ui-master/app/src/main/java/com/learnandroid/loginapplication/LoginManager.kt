@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+// Not need it
 class LoginManager {
 //    constructor() {
 //        firestore = FirebaseFirestore.getInstance()

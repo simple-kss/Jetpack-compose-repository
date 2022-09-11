@@ -23,11 +23,11 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun MyPage(navController: NavController) {
-    contents();
+    contents(navController);
 }
 
 @Composable
-fun contents() {
+fun contents(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -77,7 +77,7 @@ fun contents() {
                         .background(primaryColor)
                         .size(300.dp, 100.dp),
                     onClick = {
-//                        navController.navigate("main_page")
+                        navController.navigate("certificate_search")
                     },
                 ) {
                     Text(
@@ -129,5 +129,5 @@ fun contents() {
 @Composable
 @Preview
 fun contentPreview() {
-    contents()
+
 }

@@ -149,12 +149,15 @@ fun LoginPage(navController: NavController) {
                             LoginManager.auth?.signInWithEmailAndPassword(emailValue.value,
                                 passwordValue.value)
                                 ?.addOnCompleteListener { task ->
+                                    Log.d("OLIVER486", "로그인 진입 1");
                                     if(task.isSuccessful) {
+                                        Log.d("OLIVER486", "로그인 진입 2");
                                         // Login, 아이디와 패스워드가 맞았을 때
                                         Toast.makeText(context, "로그인 완료",
                                             Toast.LENGTH_LONG).show()
                                         navController.navigate("main_page")
                                     } else {
+                                        Log.d("OLIVER486", "로그인 진입 3");
                                         // Show the error message, 아이디와 패스워드가 틀렸을 때
                                         Toast.makeText(context, "로그인 실패. 이유: " +
                                                 task.exception?.message,
@@ -188,5 +191,9 @@ fun LoginPage(navController: NavController) {
     }
 }
 
-
-
+fun xml_text() {
+    // 안드로이드 코틀린에서의 xml 파싱을 사용하도록한다.
+    // xml 파일을 불러온다. xml파일은 assets 폴더에 넣어 관리한다.
+    // assets 폴더에 있는 xml 파일을 읽어온다.
+//    var inputStream: InputStream = assets.open
+}
