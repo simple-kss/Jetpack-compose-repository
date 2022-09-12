@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.learnandroid.loginapplication.LoginManager
+import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
@@ -146,7 +146,7 @@ fun LoginPage(navController: NavController) {
                         // 내가 추가한 부분
                         onClick = {
                             // auth가 됐다면, main페이지로 가게끔해야한다.
-                            LoginManager.auth?.signInWithEmailAndPassword(emailValue.value,
+                            FirebaseManager.auth?.signInWithEmailAndPassword(emailValue.value,
                                 passwordValue.value)
                                 ?.addOnCompleteListener { task ->
                                     Log.d("OLIVER486", "로그인 진입 1");

@@ -20,11 +20,16 @@ import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 // 그 이유는, 처음 시작할 때, 사용자가 로그인화면부터 보여주어야하기 때문입니다.
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels()
+//    private val mainViewMode1l: CertiInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        var loginManager : LoginManager = LoginManager()
-        LoginManager.init();
+        val open = assets.open("certificateInfo.xml")
+
+        FirebaseManager.init()
+        XMLCertiDataManager.init(open)
+        CertiInfoManager.printAll()
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {

@@ -94,6 +94,8 @@ fun contents(navController: NavController) {
                 fontWeight = FontWeight.ExtraBold
             )
             Column() {
+
+                // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
@@ -111,6 +113,8 @@ fun contents(navController: NavController) {
                 fontWeight = FontWeight.ExtraBold
             )
             Column() {
+                // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
+
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
@@ -124,6 +128,12 @@ fun contents(navController: NavController) {
         }
 //        Text(text = "mypage")
     }
+}
+
+@Composable
+fun la() {
+
+
 }
 
 @Composable

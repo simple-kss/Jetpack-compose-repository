@@ -1,5 +1,6 @@
 package com.learnandroid.loginapplication.composables
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,8 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.learnandroid.loginapplication.MainViewModel
+import com.google.firebase.auth.FirebaseUser
+import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
+
 
 @Composable
 fun MainPage(navController: NavController) {
@@ -28,6 +31,9 @@ fun MainPage(navController: NavController) {
 
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+
+    val user = FirebaseManager.auth?.currentUser
+    Log.d("OLIVER486-Mainpage", "Login successful " + user?.email)
 
     Box(
         modifier = Modifier

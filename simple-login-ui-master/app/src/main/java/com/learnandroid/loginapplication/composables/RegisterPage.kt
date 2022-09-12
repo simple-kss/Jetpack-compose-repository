@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.learnandroid.loginapplication.LoginManager
+import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.uGray
@@ -190,7 +190,7 @@ fun RegisterPage(navController: NavController) {
                         // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
                         
                         // 새로 계정 만들기
-                        LoginManager.auth?.createUserWithEmailAndPassword(emailValue.value,
+                        FirebaseManager.auth?.createUserWithEmailAndPassword(emailValue.value,
                             confirmPasswordValue.value)
                             ?.addOnCompleteListener { task ->
                                 if(task.isSuccessful) {
