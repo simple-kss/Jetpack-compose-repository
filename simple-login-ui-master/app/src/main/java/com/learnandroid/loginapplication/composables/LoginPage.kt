@@ -51,10 +51,8 @@ fun LoginPage(navController: NavController) {
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
-
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-
     val focusManager = LocalFocusManager.current
 
     Box(

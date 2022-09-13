@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,10 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.ktx.Firebase
+import com.learnandroid.loginapplication.CertiInfoManager
+import com.learnandroid.loginapplication.FirebaseManager
+import com.learnandroid.loginapplication.data.CertificateInfo
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
@@ -115,6 +120,8 @@ fun contents(navController: NavController) {
             Column() {
                 // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
 
+                interestedList()
+
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
@@ -131,9 +138,45 @@ fun contents(navController: NavController) {
 }
 
 @Composable
-fun la() {
+fun interestedList() {
+    LazyColumn(
+        modifier = Modifier.padding(vertical = 4.dp),
+        contentPadding = PaddingValues(16.dp)) {
+        var list = FirebaseManager.read_my_interested()
+        itemsIndexed(
+            list
+        ) { index, item ->
+            interestedRow(order = item)
+        }
+        // 버튼 2개 (취득, 관심) 해야함.
+    }
+    // val readMyInterested = FirebaseManager.read_my_interested()
+}
 
+@Composable
+fun interestedRow(order: CertificateInfo) {
+    val name = order.name
+    val category = order.category
 
+    Surface(color = MaterialTheme.colors.primary,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
+        Column(modifier = Modifier
+            .padding(24.dp)
+            .fillMaxWidth()) {
+            Row() {
+                Card() {
+                    Row(
+                        modifier = Modifier
+                            .width(100.dp)
+                    ) {
+                        Box() {
+                            Text("" + order.name)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable

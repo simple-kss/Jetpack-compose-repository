@@ -19,14 +19,12 @@ import javax.xml.parsers.ParserConfigurationException
 2022/09/11
 출처: https://m.blog.naver.com/oklmg/222113565643
 
-
-
  */
 
 class XMLCertiDataManager {
 
     companion object {
-        public fun init(inputStream: InputStream) {
+        fun init(inputStream: InputStream) {
             Log.d("OLIVER486-XML", "init")
             // 안드로이드 코틀린에서의 xml 파싱을 사용하도록한다.
             // xml 파일을 불러온다. xml 파일은 assets 폴어에 넣어 관리한다.

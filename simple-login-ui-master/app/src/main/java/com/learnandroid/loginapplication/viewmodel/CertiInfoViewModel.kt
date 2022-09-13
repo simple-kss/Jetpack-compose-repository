@@ -1,4 +1,4 @@
-package com.learnandroid.loginapplication
+package com.learnandroid.loginapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.learnandroid.loginapplication.data.CertificateInfo
@@ -11,7 +11,6 @@ MutableState 뜻: 변경가능한 상태,
 https://origogi.github.io/android/compose-state/
  */
 class CertiInfoViewModel : ViewModel() {
-
     /*
         var cats by mutableStateOf(CatsRepo.getCats())
 
@@ -32,8 +31,6 @@ class CertiInfoViewModel : ViewModel() {
 
         certiInfoList.add(info)
     }
-
-
 
     // 결과를 받을 변수, 초기 결과는 0
     private var total = 0

@@ -1,6 +1,7 @@
 package com.learnandroid.loginapplication
 
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 // LoginApplication은 startDestination (처음시작화면)으로 login_page로 지정해놓았습니다.
 // 그 이유는, 처음 시작할 때, 사용자가 로그인화면부터 보여주어야하기 때문입니다.
 class MainActivity : AppCompatActivity() {
+    var TAG = "OLIVER486-MainActivity"
     private val mainViewModel: MainViewModel by viewModels()
 //    private val mainViewMode1l: CertiInfoViewModel by viewModels()
 
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         FirebaseManager.init()
         XMLCertiDataManager.init(open)
         CertiInfoManager.printAll()
+
+        ApiManager.sendApi("정보처리기사")
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {

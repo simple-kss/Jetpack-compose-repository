@@ -71,11 +71,9 @@ fun CertificateSearchContents() {
                     .padding(16.dp),
                 hint = "Search...",
                 textState,
-
             ) {
 
             }
-
             // 여기에 검색된 리스트를 뿌려야함.
             Spacer(modifier = Modifier.height(16.dp))
             CertiList(textState);
@@ -107,10 +105,7 @@ fun CertiList(
             }
         }
         // 버튼 2개 (취득, 관심) 해야함.
-
-
     }
-
 }
 
 @Composable
@@ -157,27 +152,6 @@ fun CertiRow(order: CertificateInfo) {
             }
         }
     }
-
-//    Column {
-//        Row {
-//            // entry 출력
-//            //
-//
-//            Button(onClick = { /*TODO*/ }) {
-//                Text(
-//                    text = "취득"
-//                )
-//                // 사용자 이메일, 자격증
-//
-//            }
-//
-//            Button(onClick = { /*TODO*/ }) {
-//                Text(
-//                    text = "관심"
-//                )
-//            }
-//        }
-//    }
 }
 
 @Composable
@@ -193,22 +167,18 @@ fun SearchBar(
     state: MutableState<TextFieldValue>,
     // When we type a charactor or change the tetxt
     onSearch: (String) -> Unit = {
-
     }
 ) {
     // 힌트는 디스플레이 되는거임.
     var text by remember {
         mutableStateOf("")
-
     }
     // true면 엠티스트링 으로 할거임
     var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
-    
     Box(modifier = modifier) {
         // onValueChange는 텍스트 vlaue필드가 변경이되면 트리거되는 거임.
-
         BasicTextField(
             value = text,
             onValueChange = { value ->
@@ -250,7 +220,6 @@ fun SearchBar(
             )
         }
     }
-
 }
 
 

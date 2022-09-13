@@ -33,10 +33,8 @@ import com.learnandroid.loginapplication.data.Cat
 import com.learnandroid.loginapplication.data.CatsRepo
 import com.learnandroid.loginapplication.data.generateRandomCats
 
-
 @Composable
 fun ListItem(name : String){
-
     val expanded = remember { mutableStateOf(false)}
     val extraPadding by animateDpAsState(
         if (expanded.value) 24.dp else 0.dp,

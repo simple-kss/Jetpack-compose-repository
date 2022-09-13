@@ -80,24 +80,19 @@ class FirebaseManager {
         }
         fun read_my_interested(): MutableList<CertificateInfo> {
             val userEmail = auth?.currentUser?.email
-
             var list: MutableList<CertificateInfo> = mutableListOf<CertificateInfo>()
-
             // 데이터 읽기
             firestore.collection("interested")
                 .whereEqualTo("member_email", userEmail)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        Log.d(TAG, "중복검사 ${document.id} => ${document.data} 추가정보: "
-                                + document.data.get("certificated_name"))
                         // 리스트에 다 넣어야 됨
                         // CertificateInfo
                         var name = document.data.get("certificated_name")
                         var category = document.data.get("certificated_category")
                         var info:CertificateInfo = CertificateInfo(name as String,
                             category as String)
-
                         list.add(info)
                     }
                 } // collection end
@@ -114,7 +109,6 @@ class FirebaseManager {
                 Log.e(TAG, "category error")
             }
             Log.d(TAG, "write_my_interested called")
-
 
             // 중복검사
             // https://stackoverflow.com/questions/51054114/firebase-cloud-firestore-query-whereequalto-for-reference

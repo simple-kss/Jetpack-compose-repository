@@ -7,6 +7,7 @@ import java.io.InputStream
 class CertiInfoManager {
 
     companion object {
+        var TAG = "OLIVER486-CertiInfo"
         var list = mutableListOf<CertificateInfo>()
 
         fun add(name: String, category: String) {
@@ -17,9 +18,10 @@ class CertiInfoManager {
         fun printAll() {
             var size = list.size
             for (i: Int in 0..size-1) {
-                Log.d("OLIVER486-CertiInfo", list.get(i).toString())
+                Log.d(TAG, list.get(i).toString())
             }
         }
+
         fun getAllList(): MutableList<CertificateInfo> {
             return list
         }

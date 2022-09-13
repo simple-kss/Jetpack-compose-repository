@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.learnandroid.loginapplication.data.Cat
 import com.learnandroid.loginapplication.data.CatsRepo
 
-class CatsViewModel : ViewModel() {
+class `CatsViewModel` : ViewModel() {
     var cats by mutableStateOf(CatsRepo.getCats())
 
     fun addCat(cat: Cat) {
