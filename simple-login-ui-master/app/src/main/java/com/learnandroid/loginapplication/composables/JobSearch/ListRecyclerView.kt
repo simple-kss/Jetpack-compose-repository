@@ -8,13 +8,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
@@ -26,13 +26,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.learnandroid.loginapplication.ApiManager
 import com.learnandroid.loginapplication.CertiInfoManager
 import com.learnandroid.loginapplication.FirebaseManager
-import com.learnandroid.loginapplication.composables.CertiList
-import com.learnandroid.loginapplication.composables.CertiRow
-import com.learnandroid.loginapplication.composables.SearchBar
 import com.learnandroid.loginapplication.composables.TAG
 import com.learnandroid.loginapplication.data.CertificateInfo
+import com.learnandroid.loginapplication.data.JobInfoData
 
 // compose_version = '1.1.0-beta01'
 // https://github.com/foxandroid/RecyclerViewJCYTT/blob/master/app/src/main/java/com/example/recyclerviewjcytt/MainActivity.kt
@@ -42,6 +41,7 @@ import com.learnandroid.loginapplication.data.CertificateInfo
 fun ListRecyclerView(navController: NavController) {
     // 1. saerch 바 후에
     // 2. api 날리기
+
     // 3. 뿌려주기
 
     //// -> 날리고 받은걸 확인 후 뿌려야된다.
@@ -50,6 +50,7 @@ fun ListRecyclerView(navController: NavController) {
     // 뿌려주기
 
     var textState = remember { mutableStateOf(TextFieldValue("")) }
+    var jobState = remember { mutableStateListOf<JobInfoData>()}
 
     Surface() {
         Column() {
@@ -59,6 +60,7 @@ fun ListRecyclerView(navController: NavController) {
                     .padding(16.dp),
                 hint = "Search...",
                 textState,
+                jobState
             ) {
 
             }
@@ -67,7 +69,8 @@ fun ListRecyclerView(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             JobInfoList3(
-                textState
+                textState,
+                jobState
             )
         }
 
@@ -87,24 +90,30 @@ fun ListRecyclerView(navController: NavController) {
 
 @Composable
 fun JobInfoList3(
-    state: MutableState<TextFieldValue>
+    state: MutableState<TextFieldValue>,
+    jobState: SnapshotStateList<JobInfoData>
 ) {
 //    state.value.text
     var listSize: Int
     if (state.value.text == null || state.value.text.equals("")) {
         listSize = 0
     } else {
-        listSize = state.value.text.toInt()
+        listSize = 10
+        // state.value.text.toInt()
     }
-    var names : List<String> = List(listSize) {"$it"}
 
+//    var names : List<String> = List(listSize) {"$it"}
+    var names : List<JobInfoData> = jobState
 
     LazyColumn(
         modifier = Modifier.padding(vertical = 4.dp)
     ) {
-        items(items = names) { name ->
-            ListItem(name = name)
-            // JobInfoRow2
+//        items(items = names) { name ->
+//            ListItem(name = name)
+//        }
+
+        items(items = names) { data ->
+            JobItem(data = data)
         }
     }
 }
@@ -173,6 +182,7 @@ fun SearchJobBar(
     hint: String = "",
     state: MutableState<TextFieldValue>,
     // When we type a charactor or change the tetxt
+    jobState: SnapshotStateList<JobInfoData>,
     onSearch: (String) -> Unit = {
     }
 ) {
@@ -206,6 +216,11 @@ fun SearchJobBar(
                     Log.d(TAG, "Done Click")
                     // 검색 버튼 눌렀을때만, 업데이트 되게 해야됨.
                     state.value = TextFieldValue(text)
+
+                    // 이때 해당 value를 api로 쏴야함
+                    // poc 체크.. 해서 callback 받아서, state.value가 바뀌어지면
+                    // 해당 값이 바뀌어지는진
+                    ApiManager.sendApi(text, state, jobState);
                 }
             ),
             // 클릭했을 시 API를 쏴버리기. -> 그걸 state에 저장시켜야됨 string이든 뭐로든.

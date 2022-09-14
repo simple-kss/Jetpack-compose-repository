@@ -119,9 +119,7 @@ fun contents(navController: NavController) {
             )
             Column() {
                 // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
-
                 interestedList()
-
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))

@@ -1,7 +1,6 @@
 package com.learnandroid.loginapplication
 
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.composables.*
-import com.learnandroid.loginapplication.composables.JobSearch.ListItem
 import com.learnandroid.loginapplication.composables.JobSearch.ListRecyclerView
 import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         XMLCertiDataManager.init(open)
         CertiInfoManager.printAll()
 
-        ApiManager.sendApi("정보처리기사")
+        //ApiManager.sendApi("정보처리기사", state)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {

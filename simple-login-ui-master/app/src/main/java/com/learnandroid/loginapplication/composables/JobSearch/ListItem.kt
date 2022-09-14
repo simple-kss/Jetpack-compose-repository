@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.learnandroid.loginapplication.MainViewModel
 import com.learnandroid.loginapplication.data.Cat
 import com.learnandroid.loginapplication.data.CatsRepo
+import com.learnandroid.loginapplication.data.JobInfoData
 import com.learnandroid.loginapplication.data.generateRandomCats
 
 @Composable
@@ -59,6 +60,51 @@ fun ListItem(name : String){
                     Text(text = name, style = MaterialTheme.typography.h4.copy(
                         fontWeight = FontWeight.ExtraBold
                     ))
+                }
+                OutlinedButton(onClick = { expanded.value = !expanded.value }) {
+                    Text(if (expanded.value) "Show less" else "Show more")
+                }
+            }
+
+            if (expanded.value){
+                Column(modifier = Modifier.padding(
+                    bottom = extraPadding.coerceAtLeast(0.dp)
+                )) {
+                    Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun JobItem(data : JobInfoData){
+    val expanded = remember { mutableStateOf(false)}
+    val extraPadding by animateDpAsState(
+        if (expanded.value) 24.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+
+    Surface(color = MaterialTheme.colors.primary,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
+
+        Column(modifier = Modifier
+            .padding(24.dp)
+            .fillMaxWidth()) {
+            Row{
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    Text(text = "Course")
+                    data.title?.let {
+                        Text(text = it, style = MaterialTheme.typography.h4.copy(
+                            fontWeight = FontWeight.ExtraBold
+                        ))
+                    }
                 }
                 OutlinedButton(onClick = { expanded.value = !expanded.value }) {
                     Text(if (expanded.value) "Show less" else "Show more")
