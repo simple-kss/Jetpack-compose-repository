@@ -41,7 +41,6 @@ import com.learnandroid.loginapplication.data.JobInfoData
 fun ListRecyclerView(navController: NavController) {
     // 1. saerch 바 후에
     // 2. api 날리기
-
     // 3. 뿌려주기
 
     //// -> 날리고 받은걸 확인 후 뿌려야된다.
@@ -62,9 +61,7 @@ fun ListRecyclerView(navController: NavController) {
                 textState,
                 jobState
             ) {
-
             }
-
             // 여기에 검색된 리스트를 뿌려야함.
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -73,7 +70,6 @@ fun ListRecyclerView(navController: NavController) {
                 jobState
             )
         }
-
 //
 //    var names : List<String> = List(1000) {"$it"}
 //
@@ -129,49 +125,6 @@ fun JobInfoList2() {
         items(items = names) { name ->
             ListItem(name = name)
             // JobInfoRow2
-        }
-    }
-}
-
-@Composable
-fun JobInfoRow2(name : String) {
-    val expanded = remember { mutableStateOf(false)}
-    val extraPadding by animateDpAsState(
-        if (expanded.value) 24.dp else 0.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
-    )
-
-    Surface(color = MaterialTheme.colors.primary,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
-
-        Column(modifier = Modifier
-            .padding(24.dp)
-            .fillMaxWidth()) {
-            Row{
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                ) {
-                    Text(text = "Course")
-                    Text(text = name, style = MaterialTheme.typography.h4.copy(
-                        fontWeight = FontWeight.ExtraBold
-                    ))
-                }
-                OutlinedButton(onClick = { expanded.value = !expanded.value }) {
-                    Text(if (expanded.value) "Show less" else "Show more")
-                }
-            }
-
-            if (expanded.value){
-                Column(modifier = Modifier.padding(
-                    bottom = extraPadding.coerceAtLeast(0.dp)
-                )) {
-                    Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
-                }
-            }
         }
     }
 }
@@ -260,77 +213,47 @@ fun SearchJobBar(
     }
 }
 
-@Composable
-fun JobInfoList() {
-    LazyColumn(
-    modifier = Modifier.padding(vertical = 4.dp),
-    contentPadding = PaddingValues(16.dp)) {
-    var list = CertiInfoManager.getAllList()
-//        JobInfoRow()
-
-
-//    if (state.value != null && !state.value.text.equals("")) {
-//        list = CertiInfoManager.getListByCertiString(state.value.text)
-//        itemsIndexed(
-//            list
-//        ) { index, item ->
-//            CertiRow(order = item)
-//        }
-//    }
-//    else {
-//        itemsIndexed(
-//            list
-//        ) { index, item ->
-//            CertiRow(order = item)
-//        }
-//    }
-    // 버튼 2개 (취득, 관심) 해야함.
-}
-
-}
 
 @Composable
-fun JobInfoRow(order: CertificateInfo) {
-    val user = FirebaseManager.auth?.currentUser
-    val name = order.name
-    val category = order.category
+fun JobInfoRow2(name : String) {
+    val expanded = remember { mutableStateOf(false)}
+    val extraPadding by animateDpAsState(
+        if (expanded.value) 24.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
 
     Surface(color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
+
         Column(modifier = Modifier
             .padding(24.dp)
             .fillMaxWidth()) {
-            Row() {
-                Card() {
-                    Row(
-                        modifier = Modifier
-                            .width(100.dp)
-                    ) {
-                        Box() {
-                            Text("" + order.name)
-                        }
-//                        Box() {
-//                            Text("" + order.category)
-//                        }
-                    }
+            Row{
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    Text(text = "Course")
+                    Text(text = name, style = MaterialTheme.typography.h4.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ))
                 }
-                Button(onClick = {
-                    Log.d(TAG, "acquire called")
-                    FirebaseManager.write_my_acquire(name, category)
-                }) {
-                    Text(
-                        text = "취득"
-                    )
+                OutlinedButton(onClick = { expanded.value = !expanded.value }) {
+                    Text(if (expanded.value) "Show less" else "Show more")
                 }
-                Button(onClick = {
-                    Log.d(TAG, "interested called")
-                    FirebaseManager.write_my_interested(name, category)
-                }) {
-                    Text(
-                        text = "관심"
-                    )
+            }
+
+            if (expanded.value){
+                Column(modifier = Modifier.padding(
+                    bottom = extraPadding.coerceAtLeast(0.dp)
+                )) {
+                    Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
                 }
             }
         }
     }
 }
+

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.CertiInfoManager
 import com.learnandroid.loginapplication.FirebaseManager
@@ -31,8 +32,28 @@ fun MyPage(navController: NavController) {
     contents(navController);
 }
 
+// https://firebase.google.com/docs/auth/web/manage-users#get_a_users_profile
 @Composable
 fun contents(navController: NavController) {
+    var user = Firebase.auth.currentUser
+    var displayName: String? = null
+    var email: String? = null
+    user?.let {
+        // Id of the provider (ex: google.com)
+        val providerId = user.providerId
+
+        // UID specific to the provider
+        val uid = user.uid
+
+        // Name, email address, and profile photo Url
+        displayName = user.displayName
+        email = user.email
+        val photoUrl = user.photoUrl
+        Log.d(TAG, "Real DisplayName: " + displayName + ", : " + email +
+        ", : " + photoUrl)
+    }
+
+    
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -47,7 +68,7 @@ fun contents(navController: NavController) {
                 .fillMaxHeight()
         ) {
             Text(
-                text = "홍길동님 안녕하세요.",
+                text = displayName + "님 안녕하세요.!! " + email,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
@@ -131,7 +152,6 @@ fun contents(navController: NavController) {
             }
 
         }
-//        Text(text = "mypage")
     }
 }
 

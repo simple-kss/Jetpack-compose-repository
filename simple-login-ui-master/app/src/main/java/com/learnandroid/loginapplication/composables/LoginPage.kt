@@ -40,10 +40,8 @@ import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
-
 // 처음 앱을 킬때, 등장하게되는 화면입니다.
 // 이 화면은 MainActivity에서 기본적으로 실행하게 됩니다.
-
 @Composable
 fun LoginPage(navController: NavController) {
     val context = LocalContext.current
@@ -189,9 +187,7 @@ fun LoginPage(navController: NavController) {
     }
 }
 
-fun xml_text() {
-    // 안드로이드 코틀린에서의 xml 파싱을 사용하도록한다.
-    // xml 파일을 불러온다. xml파일은 assets 폴더에 넣어 관리한다.
-    // assets 폴더에 있는 xml 파일을 읽어온다.
-//    var inputStream: InputStream = assets.open
-}
+// 안드로이드 코틀린에서의 xml 파싱을 사용하도록한다.
+// xml 파일을 불러온다. xml파일은 assets 폴더에 넣어 관리한다.
+// assets 폴더에 있는 xml 파일을 읽어온다.
+// var inputStream: InputStream = assets.open

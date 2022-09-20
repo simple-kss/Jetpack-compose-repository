@@ -1,6 +1,8 @@
 package com.learnandroid.loginapplication.composables
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.primaryColor
@@ -188,12 +193,12 @@ fun RegisterPage(navController: NavController) {
                         Toast.makeText(context, "Button 클릭",
                             Toast.LENGTH_LONG).show()
                         // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
-                        
+
                         // 새로 계정 만들기
                         FirebaseManager.auth?.createUserWithEmailAndPassword(emailValue.value,
                             confirmPasswordValue.value)
                             ?.addOnCompleteListener { task ->
-                                if(task.isSuccessful) {
+                                if (task.isSuccessful) {
                                     // Login, 아이디와 패스워드가 맞았을 때
                                     Toast.makeText(context, "계정 생성 완료",
                                         Toast.LENGTH_LONG).show()
@@ -219,6 +224,12 @@ fun RegisterPage(navController: NavController) {
 //                                }
 //                        LoginManager.register(emailValue.value, nameValue.value, phoneValue.value,
 //                            confirmPasswordValue.value)
+
+//                        Log.d(TAG, "Real Name: " + Firebase.auth.currentUser
+                                //FirebaseManager.auth?.currentUser?.displayName)
+//                        Log.d(TAG, "Real Name(toString): "
+//                                + FirebaseManager.auth?.currentUser?.displayName.toString())
+
                     }, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {

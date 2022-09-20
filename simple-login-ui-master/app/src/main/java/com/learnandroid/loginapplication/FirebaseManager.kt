@@ -111,7 +111,7 @@ class FirebaseManager {
             Log.d(TAG, "write_my_interested called")
 
             // 중복검사
-            // https://stackoverflow.com/questions/51054114/firebase-cloud-firestore-query-whereequalto-for-reference
+            // https://stackoverflow.com/questions/51054114/`firebase`-cloud-firestore-query-whereequalto-for-reference
             firestore.collection("interested")
                 .whereEqualTo("member_email", userEmail)
                 .get()

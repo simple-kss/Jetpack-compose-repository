@@ -3,7 +3,6 @@ package com.learnandroid.loginapplication.viewmodel
 import androidx.lifecycle.ViewModel
 import com.learnandroid.loginapplication.data.CertificateInfo
 
-
 /*
 MutableState 뜻: 변경가능한 상태,
 즉, 변경되어, composable을 재 구성하려면, 관찰가능한객체를 사용해야하는데

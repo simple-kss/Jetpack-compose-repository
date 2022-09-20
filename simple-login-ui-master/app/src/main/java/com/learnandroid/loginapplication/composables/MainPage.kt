@@ -1,13 +1,12 @@
 package com.learnandroid.loginapplication.composables
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
@@ -26,14 +26,69 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 @Composable
 fun MainPage(navController: NavController) {
 //    val image = imageResource(id = R.drawable.login_image)
-    val emailValue = remember { mutableStateOf("") }
-    val passwordValue = remember { mutableStateOf("") }
-
-    val passwordVisibility = remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
-
     val user = FirebaseManager.auth?.currentUser
     Log.d("OLIVER486-Mainpage", "Login successful " + user?.email)
+
+    // 팝업창
+
+    val openDialog = remember { mutableStateOf(true) }
+    var text by remember { mutableStateOf("") }
+
+    if (user != null) {
+        // https://stackoverflow.com/questions/68852110/show-custom-alert-dialog-in-jetpack-compose
+        if (user.displayName == null && openDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog.value = false
+                },
+                title = {
+                    Text(text = "사용할 이름을 입력해주세요.")
+                },
+                text = {
+                    Column() {
+                        TextField(
+                            value = text,
+                            onValueChange = { text = it }
+                        )
+                        Text("Custom Text")
+                        Checkbox(checked = false, onCheckedChange = {})
+                    }
+                },
+                buttons = {
+                    Row(
+                        modifier = Modifier.padding(all = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                val user = FirebaseManager.auth?.currentUser
+
+                                val profileUpdates = userProfileChangeRequest {
+                                    displayName = text
+                                    photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
+                                }
+
+                                user!!.updateProfile(profileUpdates)
+                                    .addOnCompleteListener { task ->
+                                        Log.d(TAG, "addOnCompleteListener. " + user.displayName +
+                                                user.displayName.toString())
+                                        if (task.isSuccessful) {
+                                            Log.d(TAG, "User profile updated.")
+                                        }
+                                    }
+                                openDialog.value = false
+
+                            }
+                        ) {
+                            Text("Dismiss")
+                        }
+                    }
+                }
+            )
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -55,15 +110,17 @@ fun MainPage(navController: NavController) {
                 modifier = Modifier
                     .fillMaxHeight(0.90f),
             ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(0.80f)
-                        .height(50.dp),
-                    text = "홍길동님 안녕하세요.",
-                    color = Color.Black,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                )
+                if (user != null) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(0.80f)
+                            .height(50.dp),
+                        text = user.displayName + "님 안녕하세요.",
+                        color = Color.Black,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
                 // Box Column Text Spacer button
                 Button(
                     onClick = {
