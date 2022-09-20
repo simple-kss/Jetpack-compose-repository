@@ -87,8 +87,10 @@ fun MainPage(navController: NavController) {
                 }
             )
         }
+        if (user.displayName != null) {
+            text = user.displayName.toString()
+        }
     }
-
 
     Box(
         modifier = Modifier
@@ -115,7 +117,7 @@ fun MainPage(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth(0.80f)
                             .height(50.dp),
-                        text = user.displayName + "님 안녕하세요.",
+                        text = text + "님 안녕하세요.",
                         color = Color.Black,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
