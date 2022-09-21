@@ -49,7 +49,6 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 @Composable
 fun RegisterPage(navController: NavController) {
     val context = LocalContext.current
-//    val image = imageResource(id = R.drawable.register_page)
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
     val phoneValue = remember { mutableStateOf("") }
@@ -90,19 +89,20 @@ fun RegisterPage(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    OutlinedTextField(
-                        value = nameValue.value,
-                        onValueChange = { nameValue.value = it },
-                        label = { Text(text = "Name") },
-                        placeholder = { Text(text = "Name") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .border(
-                                width = 1.dp,
-                                color = uGray
-                            )
-                    )
+                    // Name은 로그인 이후에 입력받게 한다.
+//                    OutlinedTextField(
+//                        value = nameValue.value,
+//                        onValueChange = { nameValue.value = it },
+//                        label = { Text(text = "Name") },
+//                        placeholder = { Text(text = "Name") },
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth(0.8f)
+//                            .border(
+//                                width = 1.dp,
+//                                color = uGray
+//                            )
+//                    )
 
                     OutlinedTextField(
                         value = emailValue.value,
@@ -117,21 +117,21 @@ fun RegisterPage(navController: NavController) {
                                 color = uGray
                             )
                     )
-
-                    OutlinedTextField(
-                        value = phoneValue.value,
-                        onValueChange = { phoneValue.value = it },
-                        label = { Text(text = "Phone Number") },
-                        placeholder = { Text(text = "Phone Number") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .border(
-                                width = 1.dp,
-                                color = uGray
-                            ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    )
+// 추후 업데이트 예정
+//                    OutlinedTextField(
+//                        value = phoneValue.value,
+//                        onValueChange = { phoneValue.value = it },
+//                        label = { Text(text = "Phone Number") },
+//                        placeholder = { Text(text = "Phone Number") },
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth(0.8f)
+//                            .border(
+//                                width = 1.dp,
+//                                color = uGray
+//                            ),
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+//                    )
 
                     OutlinedTextField(
                         value = passwordValue.value,
@@ -208,28 +208,6 @@ fun RegisterPage(navController: NavController) {
                                         Toast.LENGTH_LONG).show()
                                 }
                             }
-//                                (this) { task ->
-//                                    if (task.isSuccessful) {
-//                                        Toast.makeText(
-//                                            this, "계정 생성 완료.",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                        finish() // 가입창 종료
-//                                    } else {
-//                                        Toast.makeText(
-//                                            this, "계정 생성 실패",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                }
-//                        LoginManager.register(emailValue.value, nameValue.value, phoneValue.value,
-//                            confirmPasswordValue.value)
-
-//                        Log.d(TAG, "Real Name: " + Firebase.auth.currentUser
-                                //FirebaseManager.auth?.currentUser?.displayName)
-//                        Log.d(TAG, "Real Name(toString): "
-//                                + FirebaseManager.auth?.currentUser?.displayName.toString())
-
                     }, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {

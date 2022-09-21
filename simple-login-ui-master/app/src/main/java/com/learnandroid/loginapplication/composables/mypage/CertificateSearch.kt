@@ -39,7 +39,6 @@ search bar참고
 https://www.youtube.com/watch?v=O6k5Q2LoL0k&ab_channel=PhilippLackner
 https://www.youtube.com/watch?v=D06EV3PngJY&ab_channel=PhilippLackner
 
-
  */
 var TAG = "oliver486-Certificate"
 

@@ -33,6 +33,8 @@ import com.learnandroid.loginapplication.data.Cat
 import com.learnandroid.loginapplication.data.CatsRepo
 import com.learnandroid.loginapplication.data.JobInfoData
 import com.learnandroid.loginapplication.data.generateRandomCats
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ListItem(name : String){
@@ -115,8 +117,32 @@ fun JobItem(data : JobInfoData){
                 Column(modifier = Modifier.padding(
                     bottom = extraPadding.coerceAtLeast(0.dp)
                 )) {
-                    val str: String = data.toString()
-                    Text(text = str)
+                    // JobData 출력.
+                    Text(text = data.company.toString(), fontWeight = FontWeight.Bold)
+                    Text(text = data.title.toString(), fontWeight = FontWeight.Bold)
+
+                    Text(text = "지원자격", fontWeight = FontWeight.Bold)
+                    Text(text = "경력: " + data.career.toString())
+                    Text(text = "학력: " + data.minEdubg.toString() + " ~ " + data.maxEdubg.toString())
+
+                    Text(text = "근무조건", fontWeight = FontWeight.Bold)
+                    Text(text = "지역: " + data.basicAddr.toString())
+                    Text(text = "급여형태: " + data.salTpNm.toString())
+                    Text(text = "월급: " + data.sal.toString())
+                    Text(text = "최소월급: " + data.minSal.toString() + "원")
+                    Text(text = "최대월급: " + data.maxSal.toString() + "원")
+                    Text(text = "근무형태: " + data.holidayTpNm.toString())
+
+                    Text(text = "링크", fontWeight = FontWeight.Bold)
+                    val infoUrl = URLEncoder.encode(data.wantedInfoUrl.toString(),
+                        StandardCharsets.UTF_8.toString())
+                    Text(text = data.wantedInfoUrl.toString())
+                    Text(text = data.wantedMobileInfoUrl.toString())
+
+                    
+//                    val str: String = data.toString()
+//                    Text(text = str)
+                    
                     // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
                 }
             }

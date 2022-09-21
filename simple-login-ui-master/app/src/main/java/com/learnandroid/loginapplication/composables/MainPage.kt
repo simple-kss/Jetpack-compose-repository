@@ -25,11 +25,8 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun MainPage(navController: NavController) {
-//    val image = imageResource(id = R.drawable.login_image)
     val user = FirebaseManager.auth?.currentUser
     Log.d("OLIVER486-Mainpage", "Login successful " + user?.email)
-
-    // 팝업창
 
     val openDialog = remember { mutableStateOf(true) }
     var text by remember { mutableStateOf("") }
@@ -50,8 +47,9 @@ fun MainPage(navController: NavController) {
                             value = text,
                             onValueChange = { text = it }
                         )
-                        Text("Custom Text")
-                        Checkbox(checked = false, onCheckedChange = {})
+                        // Text("Custom Text")
+                        // 추후에 Checkbox가 필요할 수 도 있으니 우선 주석처리로 남겨놓음.
+                        // Checkbox(checked = false, onCheckedChange = {})
                     }
                 },
                 buttons = {
@@ -78,7 +76,6 @@ fun MainPage(navController: NavController) {
                                         }
                                     }
                                 openDialog.value = false
-
                             }
                         ) {
                             Text("Dismiss")

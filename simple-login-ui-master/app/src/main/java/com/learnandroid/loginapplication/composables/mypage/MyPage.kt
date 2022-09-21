@@ -53,7 +53,6 @@ fun contents(navController: NavController) {
         ", : " + photoUrl)
     }
 
-    
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -68,7 +67,7 @@ fun contents(navController: NavController) {
                 .fillMaxHeight()
         ) {
             Text(
-                text = displayName + "님 안녕하세요.!! " + email,
+                text = displayName + "님 안녕하세요.",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
@@ -92,7 +91,6 @@ fun contents(navController: NavController) {
                         color = whiteBackground
                     )
                 }
-
                 Button(
                     modifier = Modifier
                         .clip(RoundedCornerShape(0.dp, 0.dp, 15.dp, 15.dp))
@@ -113,14 +111,12 @@ fun contents(navController: NavController) {
                     )
                 }
             }
-
             Text(
                 text = "취득 자격증 목록",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
             Column() {
-
                 // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                 Row(
                     modifier = Modifier
@@ -132,7 +128,6 @@ fun contents(navController: NavController) {
                     Text(text = "정보처리기사", fontSize = 20.sp, color = whiteBackground)
                 }
             }
-
             Text(
                 text = "관심 자격증 목록",
                 fontSize = 30.sp,

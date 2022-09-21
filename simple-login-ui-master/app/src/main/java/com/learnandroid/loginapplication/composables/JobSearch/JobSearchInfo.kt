@@ -38,7 +38,7 @@ import com.learnandroid.loginapplication.data.JobInfoData
 // https://www.youtube.com/watch?v=q7qHRnzcfEQ&ab_channel=Foxandroid
 // 출처
 @Composable
-fun ListRecyclerView(navController: NavController) {
+fun JobSearchInfo(navController: NavController) {
     // 1. saerch 바 후에
     // 2. api 날리기
     // 3. 뿌려주기
@@ -47,7 +47,6 @@ fun ListRecyclerView(navController: NavController) {
     //// ->그런데 API가 비동기로 되어있어서 API send이후 바로 결과를 보여주지 못한다.
     //// -<
     // 뿌려주기
-
     var textState = remember { mutableStateOf(TextFieldValue("")) }
     var jobState = remember { mutableStateListOf<JobInfoData>()}
 
@@ -65,7 +64,7 @@ fun ListRecyclerView(navController: NavController) {
             // 여기에 검색된 리스트를 뿌려야함.
             Spacer(modifier = Modifier.height(16.dp))
 
-            JobInfoList3(
+            JobInfoList(
                 textState,
                 jobState
             )
@@ -85,7 +84,7 @@ fun ListRecyclerView(navController: NavController) {
 }
 
 @Composable
-fun JobInfoList3(
+fun JobInfoList(
     state: MutableState<TextFieldValue>,
     jobState: SnapshotStateList<JobInfoData>
 ) {
@@ -116,7 +115,6 @@ fun JobInfoList3(
 
 @Composable
 fun JobInfoList2() {
-
     var names : List<String> = List(1000) {"$it"}
 
     LazyColumn(

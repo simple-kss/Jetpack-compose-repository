@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.composables.*
-import com.learnandroid.loginapplication.composables.JobSearch.ListRecyclerView
+import com.learnandroid.loginapplication.composables.JobSearch.JobSearchInfo
 import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 
 // 앱이 실행하자마자, 시작하는 프로세스가 MainAcitivity입니다.
@@ -20,18 +20,14 @@ import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 class MainActivity : AppCompatActivity() {
     var TAG = "OLIVER486-MainActivity"
     private val mainViewModel: MainViewModel by viewModels()
-//    private val mainViewMode1l: CertiInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        var loginManager : LoginManager = LoginManager()
         val open = assets.open("certificateInfo.xml")
 
         FirebaseManager.init()
         XMLCertiDataManager.init(open)
         CertiInfoManager.printAll()
-
-        //ApiManager.sendApi("정보처리기사", state)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
@@ -53,9 +49,7 @@ class MainActivity : AppCompatActivity() {
             composable("login_page", content = { LoginPage(navController = navController) })
             composable("register_page", content = { RegisterPage(navController = navController) })
             composable("main_page", content = { MainPage(navController = navController) })
-            composable("job_search_info_page", content = { ListRecyclerView(navController = navController)})
-//            composable("job_search_info_page", content = { JobSearchInfo(navController = navController
-//                , mainViewModel = mainViewModel) })
+            composable("job_search_info_page", content = { JobSearchInfo(navController = navController) })
             composable("community_page", content = { CommunityPage(navController = navController) })
             composable("mypage_page", content = { MyPage(navController = navController) })
             composable("certificate_search", content = { CertificateSearch(navController = navController)})

@@ -45,8 +45,6 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 @Composable
 fun LoginPage(navController: NavController) {
     val context = LocalContext.current
-//    val image = ImageBitmap.imageResource(id = R.drawable.login_image)
-
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
     val passwordVisibility = remember { mutableStateOf(false) }
@@ -98,10 +96,6 @@ fun LoginPage(navController: NavController) {
                         placeholder = { Text(text = "Email Address") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
-                        // onImeActionPerformed is deprecated
-//                        onImeActionPerformed = { _, _ ->
-//                            focusRequester.requestFocus()
-//                        }
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     )
 

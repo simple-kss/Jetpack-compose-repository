@@ -37,7 +37,6 @@ fun CommunityPageContents() {
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
-
             // 이거로 레이지컬럼 뿌려저야댐
             // https://www.youtube.com/watch?v=V-3sLO_TWl0&ab_channel=HoodLab
         }
