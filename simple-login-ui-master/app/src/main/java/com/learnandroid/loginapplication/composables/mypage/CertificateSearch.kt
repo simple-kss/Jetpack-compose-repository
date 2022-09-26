@@ -44,7 +44,7 @@ var TAG = "oliver486-Certificate"
 
 @Composable
 fun CertificateSearch(navController: NavController) {
-    CertificateSearchContents();
+    CertificateSearchContents()
 }
 
 @Composable
@@ -75,7 +75,7 @@ fun CertificateSearchContents() {
             }
             // 여기에 검색된 리스트를 뿌려야함.
             Spacer(modifier = Modifier.height(16.dp))
-            CertiList(textState);
+            CertiList(textState)
         }
     }
 }
@@ -118,13 +118,13 @@ fun CertiRow(order: CertificateInfo) {
         Column(modifier = Modifier
             .padding(24.dp)
             .fillMaxWidth()) {
-            Row() {
-                Card() {
+            Row {
+                Card {
                     Row(
                         modifier = Modifier
                             .width(100.dp)
                     ) {
-                        Box() {
+                        Box {
                             Text("" + order.name)
                         }
 //                        Box() {

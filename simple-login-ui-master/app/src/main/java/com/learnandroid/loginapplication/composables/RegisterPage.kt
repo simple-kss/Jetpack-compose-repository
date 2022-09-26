@@ -231,5 +231,5 @@ fun RegisterPage(navController: NavController) {
 @Composable
 @Preview
 fun RegisterPagePreview() {
-    RegisterPage(rememberNavController());
+    RegisterPage(rememberNavController())
 }

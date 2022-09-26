@@ -139,15 +139,15 @@ fun LoginPage(navController: NavController) {
                             FirebaseManager.auth?.signInWithEmailAndPassword(emailValue.value,
                                 passwordValue.value)
                                 ?.addOnCompleteListener { task ->
-                                    Log.d("OLIVER486", "로그인 진입 1");
+                                    Log.d("OLIVER486", "로그인 진입 1")
                                     if(task.isSuccessful) {
-                                        Log.d("OLIVER486", "로그인 진입 2");
+                                        Log.d("OLIVER486", "로그인 진입 2")
                                         // Login, 아이디와 패스워드가 맞았을 때
                                         Toast.makeText(context, "로그인 완료",
                                             Toast.LENGTH_LONG).show()
                                         navController.navigate("main_page")
                                     } else {
-                                        Log.d("OLIVER486", "로그인 진입 3");
+                                        Log.d("OLIVER486", "로그인 진입 3")
                                         // Show the error message, 아이디와 패스워드가 틀렸을 때
                                         Toast.makeText(context, "로그인 실패. 이유: " +
                                                 task.exception?.message,
@@ -155,8 +155,8 @@ fun LoginPage(navController: NavController) {
                                     }
                                 }
 
-                            Log.d("OLIVER486", "value : " + passwordValue.value);
-                            Log.d("OLIVER486", "value : " + emailValue.value);
+                            Log.d("OLIVER486", "value : " + passwordValue.value)
+                            Log.d("OLIVER486", "value : " + emailValue.value)
                         },
                         shape = RoundedCornerShape(25),
                         modifier = Modifier

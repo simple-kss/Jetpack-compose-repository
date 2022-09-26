@@ -2,6 +2,8 @@ package com.learnandroid.loginapplication
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
@@ -78,9 +80,12 @@ class FirebaseManager {
                     Log.w(TAG, "Error getting documents.", exception)
                 }
         }
-        fun read_my_interested(): MutableList<CertificateInfo> {
+        fun read_my_interested(): SnapshotStateList<CertificateInfo> {
             val userEmail = auth?.currentUser?.email
-            var list: MutableList<CertificateInfo> = mutableListOf<CertificateInfo>()
+            var list: SnapshotStateList<CertificateInfo> = mutableStateListOf<CertificateInfo>()
+
+            Log.d(TAG, "!!!! userEmail: " + userEmail)
+
             // 데이터 읽기
             firestore.collection("interested")
                 .whereEqualTo("member_email", userEmail)
@@ -93,6 +98,32 @@ class FirebaseManager {
                         var category = document.data.get("certificated_category")
                         var info:CertificateInfo = CertificateInfo(name as String,
                             category as String)
+                        Log.d(TAG, "document name: " + document + ", category: " + category)
+                        list.add(info)
+                    }
+                } // collection end
+            return list
+        }
+
+        fun read_my_acquire(): SnapshotStateList<CertificateInfo> {
+            val userEmail = auth?.currentUser?.email
+            var list: SnapshotStateList<CertificateInfo> = mutableStateListOf<CertificateInfo>()
+
+            Log.d(TAG, "!!!! userEmail: " + userEmail)
+
+            // 데이터 읽기
+            firestore.collection("acquire")
+                .whereEqualTo("member_email", userEmail)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        // 리스트에 다 넣어야 됨
+                        // CertificateInfo
+                        var name = document.data.get("certificated_name")
+                        var category = document.data.get("certificated_category")
+                        var info:CertificateInfo = CertificateInfo(name as String,
+                            category as String)
+                        Log.d(TAG, "document name: " + document + ", category: " + category)
                         list.add(info)
                     }
                 } // collection end
@@ -244,7 +275,7 @@ class FirebaseManager {
 //                    }
             }
 
-            return true;
+            return true
         }
 
         fun register_legacy(email : String, name : String, hp : String,
@@ -274,7 +305,7 @@ class FirebaseManager {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
-            return true;
+            return true
         }
 
     }

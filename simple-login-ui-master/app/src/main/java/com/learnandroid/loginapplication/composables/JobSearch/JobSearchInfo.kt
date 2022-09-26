@@ -50,8 +50,8 @@ fun JobSearchInfo(navController: NavController) {
     var textState = remember { mutableStateOf(TextFieldValue("")) }
     var jobState = remember { mutableStateListOf<JobInfoData>()}
 
-    Surface() {
-        Column() {
+    Surface {
+        Column {
             SearchJobBar(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -171,7 +171,7 @@ fun SearchJobBar(
                     // 이때 해당 value를 api로 쏴야함
                     // poc 체크.. 해서 callback 받아서, state.value가 바뀌어지면
                     // 해당 값이 바뀌어지는진
-                    ApiManager.sendApi(text, state, jobState);
+                    ApiManager.sendApi(text, state, jobState)
                 }
             ),
             // 클릭했을 시 API를 쏴버리기. -> 그걸 state에 저장시켜야됨 string이든 뭐로든.

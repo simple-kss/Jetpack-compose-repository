@@ -42,7 +42,7 @@ fun MainPage(navController: NavController) {
                     Text(text = "사용할 이름을 입력해주세요.")
                 },
                 text = {
-                    Column() {
+                    Column {
                         TextField(
                             value = text,
                             onValueChange = { text = it }

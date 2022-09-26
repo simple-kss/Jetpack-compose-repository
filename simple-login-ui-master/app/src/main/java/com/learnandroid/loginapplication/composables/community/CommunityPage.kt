@@ -14,7 +14,7 @@ import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun CommunityPage(navController: NavController) {
-    CommunityPageContents();
+    CommunityPageContents()
 }
 
 @Composable
@@ -46,5 +46,5 @@ fun CommunityPageContents() {
 @Composable
 @Preview
 fun CommunityPageContentsPreview() {
-    CommunityPageContents();
+    CommunityPageContents()
 }
