@@ -123,9 +123,13 @@ fun CertiRow(order: CertificateInfo) {
                     Row(
                         modifier = Modifier
                             .width(100.dp)
+
                     ) {
                         Box {
-                            Text("" + order.name)
+                            Text(
+                                color = Color.White,
+                                text = "" + order.name
+                            )
                         }
 //                        Box() {
 //                            Text("" + order.category)

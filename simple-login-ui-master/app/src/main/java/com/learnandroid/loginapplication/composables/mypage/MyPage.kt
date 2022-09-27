@@ -1,23 +1,20 @@
 package com.learnandroid.loginapplication.composables
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,10 +40,13 @@ fun contentItems(navController: NavController) {
     var interested = remember { mutableStateListOf<CertificateInfo>() }
     var acquire = remember { mutableStateListOf<CertificateInfo>() }
 
-
     var user = Firebase.auth.currentUser
     var displayName: String? = null
     var email: String? = null
+
+    var visibleInterested by remember { mutableStateOf(true) }
+    var acquireInterested by remember { mutableStateOf(true) }
+
     user?.let {
         // Id of the provider (ex: google.com)
         val providerId = user.providerId
@@ -100,7 +100,9 @@ fun contentItems(navController: NavController) {
                             .background(primaryColor)
                             .fillMaxWidth() // 여기서 300.dp의 width는 씹히게된다.
                             .size(300.dp, 100.dp),
-                        onClick = {},
+                        onClick = {
+                            navController.navigate("modify_myinfo")
+                        },
                     ) {
                         Text(
                             text = "정보 설정",
@@ -119,7 +121,6 @@ fun contentItems(navController: NavController) {
                             .fillMaxWidth()
                             .size(300.dp, 100.dp),
                         onClick = {
-                            //TODO: NAVI
                             navController.navigate("certificate_search")
                         },
                     ) {
@@ -130,51 +131,68 @@ fun contentItems(navController: NavController) {
                         )
                     }
                 }
-                Text(
-                    text = "취득 자격증 목록",
-                    color = Color.Black,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Column {
-                    // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
-                    // 레이지컬럼으로 바로해줘야함.
-                    acquire = FirebaseManager.read_my_acquire()
-                    interestedList(acquire)
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(primaryColor)
-                            .fillMaxWidth()
-                            .size(300.dp, 100.dp),
-                    ) {
-                        Text(text = "2012년 2월 18일", fontSize = 20.sp, color = whiteBackground)
-                        Text(text = "정보처리기사", fontSize = 20.sp, color = whiteBackground)
+                Button(
+                    onClick = { visibleInterested = !visibleInterested },
+                    colors = ButtonDefaults.buttonColors(whiteBackground),
+                    border = BorderStroke(0.dp, whiteBackground),
+                    elevation = null
+                ) {
+                    Text(
+                        text = AnnotatedString("취득 자격증 목록"),
+                        color = Color.Black,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+                if (visibleInterested) {
+                    Column {
+                        // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
+                        // 레이지컬럼으로 바로해줘야함.
+                        acquire = FirebaseManager.read_my_acquire()
+                        interestedList(acquire)
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(primaryColor)
+                                .fillMaxWidth()
+                                .size(300.dp, 100.dp),
+                        ) {
+                            Text(text = "2012년 2월 18일", fontSize = 20.sp, color = whiteBackground)
+                            Text(text = "정보처리기사", fontSize = 20.sp, color = whiteBackground)
+                        }
                     }
                 }
-                Text(
-                    text = "관심 자격증 목록",
-                    color = Color.Black,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Column {
-                    // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
-                    // 레이지컬럼으로 바로해줘야함.
-                    interested = FirebaseManager.read_my_interested()
+                Button(
+                    onClick = { acquireInterested = !acquireInterested },
+                    colors = ButtonDefaults.buttonColors(whiteBackground),
+                    border = BorderStroke(0.dp, whiteBackground),
+                    elevation = null
+                ) {
+                    Text(
+                        text = "관심 자격증 목록",
+                        color = Color.Black,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+                if (acquireInterested) {
+                    Column {
+                        // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
+                        // 레이지컬럼으로 바로해줘야함.
+                        interested = FirebaseManager.read_my_interested()
 
-                    interestedList(interested)
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(primaryColor)
-                            .fillMaxWidth()
-                            .size(300.dp, 100.dp),
-                    ) {
-                        Text(text = "산업안전기사", fontSize = 20.sp, color = whiteBackground)
+                        interestedList(interested)
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(primaryColor)
+                                .fillMaxWidth()
+                                .size(300.dp, 100.dp),
+                        ) {
+                            Text(text = "산업안전기사", fontSize = 20.sp, color = whiteBackground)
+                        }
                     }
                 }
-
             }
         }
     }
@@ -185,7 +203,9 @@ fun interestedList(list: List<CertificateInfo>) {
     LazyColumn(
         modifier = Modifier
             .padding(vertical = 4.dp)
-            .fillMaxWidth(),
+            .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
+            .fillMaxWidth()
+            .background(primaryColor),
         contentPadding = PaddingValues(16.dp)) {
 //        var list = FirebaseManager.read_my_interested()
         Log.d(TAG, "!!!!!!!!  list.size: " + list.size);
@@ -208,25 +228,22 @@ fun interestedRow(
     val name = order.name
     val category = order.category
 
-
     Surface(color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Column(modifier = Modifier
             .padding(24.dp)
             .fillMaxWidth()) {
-            Row {
-                Card {
-                    Row(
-                        modifier = Modifier
-                            .width(100.dp)
-                    ) {
-                        Box {
-                            Text("" + order.name)
+            Row (
+                modifier = Modifier
+                    .width(100.dp)
+                    .background(primaryColor),
+            ) {
+                Text(
+                    color = Color.White,
+                    text = "" + order.name
+                )
 //                            Text("" + order)
-                        }
-                    }
-                }
             }
         }
     }

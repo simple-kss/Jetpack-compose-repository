@@ -1,5 +1,6 @@
 package com.learnandroid.loginapplication.composables.JobSearch
 
+import android.webkit.WebView
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -139,7 +140,6 @@ fun JobItem(data : JobInfoData){
                     Text(text = data.wantedInfoUrl.toString())
                     Text(text = data.wantedMobileInfoUrl.toString())
 
-                    
 //                    val str: String = data.toString()
 //                    Text(text = str)
                     
