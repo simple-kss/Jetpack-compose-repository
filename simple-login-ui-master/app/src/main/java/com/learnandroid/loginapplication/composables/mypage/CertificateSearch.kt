@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
@@ -52,8 +54,10 @@ fun CertificateSearchContents() {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
 
     Surface(
-        color = MaterialTheme.colors.background,
-        modifier = Modifier.fillMaxSize()
+        color = whiteBackground,
+        modifier = Modifier
+            .background(whiteBackground)
+            .fillMaxSize()
     ) {
         Column {
             Spacer(modifier = Modifier.height(20.dp))
@@ -113,45 +117,54 @@ fun CertiRow(order: CertificateInfo) {
     val name = order.name
     val category = order.category
 
-    Surface(color = MaterialTheme.colors.primary,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
-        Column(modifier = Modifier
-            .padding(24.dp)
-            .fillMaxWidth()) {
-            Row {
-                Card {
-                    Row(
-                        modifier = Modifier
-                            .width(100.dp)
+    Box(
+        modifier = Modifier
+            .padding(5.dp)
+    ) {
+        Row (
+            modifier = Modifier
+                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+                .background(MaterialTheme.colors.primary)
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(5.dp)
+        ) {
+            Card (
+                modifier = Modifier
+                    .width(200.dp)
+                    .background(MaterialTheme.colors.primary)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .background(MaterialTheme.colors.primary)
+                ) {
+                    Box {
+                        Text(
+                            color = Color.White,
+                            text = "" + order.name,
 
-                    ) {
-                        Box {
-                            Text(
-                                color = Color.White,
-                                text = "" + order.name
-                            )
-                        }
+                        )
+                    }
 //                        Box() {
 //                            Text("" + order.category)
 //                        }
-                    }
                 }
-                Button(onClick = {
-                    Log.d(TAG, "acquire called")
-                    FirebaseManager.write_my_acquire(name, category)
-                }) {
-                    Text(
-                        text = "취득"
-                    )
-                }
-                Button(onClick = {
-                    Log.d(TAG, "interested called")
-                    FirebaseManager.write_my_interested(name, category)
-                }) {
-                    Text(
-                        text = "관심"
-                    )
-                }
+            }
+            Button(onClick = {
+                Log.d(TAG, "acquire called")
+                FirebaseManager.write_my_acquire(name, category)
+            }) {
+                Text(
+                    text = "취득"
+                )
+            }
+            Button(onClick = {
+                Log.d(TAG, "interested called")
+                FirebaseManager.write_my_interested(name, category)
+            }) {
+                Text(
+                    text = "관심"
+                )
             }
         }
     }
@@ -205,7 +218,7 @@ fun SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(5.dp, CircleShape)
-                .background(Color.White, CircleShape)
+                .background(Color.Gray, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .onFocusChanged {
                     isHintDisplayed = !it.isFocused
