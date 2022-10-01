@@ -6,11 +6,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.learnandroid.loginapplication.composables.*
 import com.learnandroid.loginapplication.composables.JobSearch.JobSearchInfo
+import com.learnandroid.loginapplication.composables.community.ArticleInfoPage
+import com.learnandroid.loginapplication.composables.community.ArticleWritePage
 import com.learnandroid.loginapplication.composables.mypage.ModifyMyinfo
 import com.learnandroid.loginapplication.ui.theme.LoginApplicationTheme
 
@@ -55,6 +59,15 @@ class MainActivity : AppCompatActivity() {
             composable("mypage_page", content = { MyPage(navController = navController) })
             composable("certificate_search", content = { CertificateSearch(navController = navController)})
             composable("modify_myinfo", content = { ModifyMyinfo(navController = navController)})
+            composable("article_write_page", content = { ArticleWritePage(navController = navController)})
+            composable(
+                "ArticleInfoPage/{pageId}",
+                arguments = listOf(navArgument("pageId") { type = NavType.StringType })
+            ) { backStackEntry ->
+//                val authorId = 1
+                val pageId = backStackEntry.arguments!!.getString("pageId")!!
+                ArticleInfoPage(pageId)
+            }
         })
     }
 }

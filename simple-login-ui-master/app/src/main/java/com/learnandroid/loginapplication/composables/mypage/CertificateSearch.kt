@@ -237,6 +237,3 @@ fun SearchBar(
         }
     }
 }
-
-
-

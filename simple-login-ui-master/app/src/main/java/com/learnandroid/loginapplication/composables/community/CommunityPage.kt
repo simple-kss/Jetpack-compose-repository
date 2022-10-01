@@ -1,42 +1,56 @@
 package com.learnandroid.loginapplication.composables
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.learnandroid.loginapplication.FirebaseManager
+import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 @Composable
 fun CommunityPage(navController: NavController) {
-    CommunityPageContents()
-}
-
-@Composable
-fun CommunityPageContents() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(whiteBackground),
-    ) {
+    Surface() {
         Column(
-            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .fillMaxHeight()
+                .background(whiteBackground),
         ) {
             Text(
                 text = "홍길동님 안녕하세요.",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
+            Button(
+                onClick = {navController.navigate("article_write_page")}
+            ) {
+                Text(
+                    text = "글작성",
+                )
+            }
+            var articles = FirebaseManager.read_articles()
+            LazyColumnWithArticles(articles, navController)
+
             // 이거로 레이지컬럼 뿌려저야댐
             // https://www.youtube.com/watch?v=V-3sLO_TWl0&ab_channel=HoodLab
         }
@@ -44,7 +58,44 @@ fun CommunityPageContents() {
 }
 
 @Composable
+fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navController: NavController) {
+    LazyColumn(
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Log.d(TAG, "!!!!!!!!  list.size: " + articles.size);
+        itemsIndexed(
+            articles
+//            listOf(100, 200, 300)
+        ) { index, item ->
+            KotlinWorldCard(order = item, navController)
+        }
+    }
+
+}
+
+@Composable
+fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
+    Card(
+        Modifier
+            .padding(12.dp)
+            .border(width = 4.dp, color = Color.Black)
+            .fillMaxWidth()
+            .height(100.dp)
+    ) {
+        Button(
+            onClick = {
+                navController.navigate("ArticleInfoPage/${order.id}")
+            }
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text("Kotlin World ${order.id}, ${order.email}, ${order.title}, ${order.contents}" )
+            }
+        }
+    }
+}
+
+@Composable
 @Preview
-fun CommunityPageContentsPreview() {
-    CommunityPageContents()
+fun CommunityPagePreview() {
+    CommunityPage(rememberNavController())
 }

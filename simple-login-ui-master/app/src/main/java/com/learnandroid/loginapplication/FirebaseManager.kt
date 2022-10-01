@@ -2,6 +2,7 @@ package com.learnandroid.loginapplication
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
@@ -9,7 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.ktx.Firebase
+import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.data.CertificateInfo
 
 // Not need it
@@ -130,6 +133,39 @@ class FirebaseManager {
             return list
         }
 
+        fun read_articles(): SnapshotStateList<ArticleInfo> {
+            val userEmail = auth?.currentUser?.email
+            var list: SnapshotStateList<ArticleInfo> = mutableStateListOf<ArticleInfo>()
+
+            // 데이터 읽기
+            firestore.collection("articles")
+//                .whereEqualTo("member_email", userEmail)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        // 리스트에 다 넣어야 됨
+                        // CertificateInfo
+                        var id = document.id
+                        var member_email = document.data.get("member_email")
+                        var title = document.data.get("title")
+                        var contents = document.data.get("contents")
+
+                        var info : ArticleInfo = ArticleInfo(
+                            id,
+                            member_email as String,
+                            title as String,
+                            contents as String
+                        )
+                        Log.d(TAG, "document member_email: " + member_email
+                                + ", title: " + title
+                                + ", contents: " + contents
+                        )
+                        list.add(info)
+                    }
+                } // collection end
+            return list
+        }
+
         fun write_my_interested(certificateName: String, category: String) {
             val userEmail = auth?.currentUser?.email
             var duplicated = false
@@ -232,6 +268,31 @@ class FirebaseManager {
                 } // collection end
         }
 
+        fun write_artice(title: String, contents: String) {
+            val userEmail = auth?.currentUser?.email
+            if (title == null) {
+                Log.e(TAG, "acquire error")
+            }
+            if (contents == null) {
+                Log.e(TAG, "acquire error")
+            }
+            Log.d(TAG, "write_article called")
+            // 데이터 쓰기
+            var articleInfo = hashMapOf(
+                "member_email" to userEmail,
+                "title" to title,
+                "contents" to contents,
+            )
+            firestore.collection("articles")
+                .add(articleInfo)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
+        }
+
         fun login(email : String, password : String): Boolean {
             // 어떤 데이터를 읽어 올건지 생각해야함.
             // 해당데이터가 있는 지 확인해야함.
@@ -276,6 +337,38 @@ class FirebaseManager {
             }
 
             return true
+        }
+
+        fun read_article_by_id(id: String, readArticleById: MutableState<ArticleInfo>) {
+
+            // 데이터 읽기
+            // https://stackoverflow.com/questions/47876754/query-firestore-database-for-document-id
+            firestore.collection("articles")
+                .whereEqualTo(FieldPath.documentId(),  id)
+//                .whereEqualTo("member_email", userEmail)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        // 리스트에 다 넣어야 됨
+                        // CertificateInfo
+                        var id = document.id
+                        var member_email = document.data.get("member_email")
+                        var title = document.data.get("title")
+                        var contents = document.data.get("contents")
+
+                        readArticleById.value = ArticleInfo(
+                            id,
+                            member_email as String,
+                            title as String,
+                            contents as String
+                        )
+                        Log.d(TAG, "read_article_by_id" +
+                                " document member_email: " + member_email
+                                + ", title: " + title
+                                + ", contents: " + contents
+                        )
+                    }
+                } // collection end
         }
 
         fun register_legacy(email : String, name : String, hp : String,
