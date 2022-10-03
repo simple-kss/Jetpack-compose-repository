@@ -2,12 +2,14 @@ package com.learnandroid.loginapplication.composables.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.learnandroid.loginapplication.FirebaseManager
@@ -33,28 +35,26 @@ fun ArticleInfoPage(id: String) {
                 .background(whiteBackground)
                 .padding(10.dp),
         ) {
-            Text(
-                text = id,
-                color = Color.Black
-            )
-            if (readArticleById.value != null) {
-                readArticleById.value.email?.let {
-                    Text(
-                        text = it,
-                        color = Color.Black
-                    )
-                }
-                readArticleById.value.title?.let {
-                    Text(
-                        text = it,
-                        color = Color.Black
-                    )
-                }
-                readArticleById.value.contents?.let {
-                    Text(
-                        text = it,
-                        color = Color.Black
-                    )
+            ProvideTextStyle(TextStyle(color = Color.Black)) {
+                Text(
+                    text = id,
+                )
+                if (readArticleById.value != null) {
+                    readArticleById.value.email?.let {
+                        Text(
+                            text = it,
+                        )
+                    }
+                    readArticleById.value.title?.let {
+                        Text(
+                            text = it,
+                        )
+                    }
+                    readArticleById.value.contents?.let {
+                        Text(
+                            text = it,
+                        )
+                    }
                 }
             }
         }

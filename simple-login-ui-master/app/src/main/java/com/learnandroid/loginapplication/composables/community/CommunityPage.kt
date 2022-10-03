@@ -68,6 +68,8 @@ fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navControll
 //            listOf(100, 200, 300)
         ) { index, item ->
             KotlinWorldCard(order = item, navController)
+            Spacer(modifier = Modifier
+                .border(width = 1.dp, color = Color.LightGray))
         }
     }
 
@@ -78,7 +80,9 @@ fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
     Card(
         Modifier
             .padding(12.dp)
-            .border(width = 4.dp, color = Color.Black)
+//             테투리 굵은석
+//            .border(width = 4.dp, color = Color.Black)
+            .background(whiteBackground)
             .fillMaxWidth()
             .height(100.dp)
     ) {
@@ -87,9 +91,13 @@ fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
                 navController.navigate("ArticleInfoPage/${order.id}")
             }
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text("Kotlin World ${order.id}, ${order.email}, ${order.title}, ${order.contents}" )
+            Column() {
+                Text("${order.id}")
+                Text("${order.email}")
+                Text("${order.title}")
+                Text("${order.contents}")
             }
+//            Box(contentAlignment = Alignment.Center)
         }
     }
 }

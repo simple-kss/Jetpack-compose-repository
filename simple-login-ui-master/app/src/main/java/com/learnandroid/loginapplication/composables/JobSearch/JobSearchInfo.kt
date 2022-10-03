@@ -32,6 +32,7 @@ import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.composables.TAG
 import com.learnandroid.loginapplication.data.CertificateInfo
 import com.learnandroid.loginapplication.data.JobInfoData
+import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 // compose_version = '1.1.0-beta01'
 // https://github.com/foxandroid/RecyclerViewJCYTT/blob/master/app/src/main/java/com/example/recyclerviewjcytt/MainActivity.kt
@@ -50,8 +51,13 @@ fun JobSearchInfo(navController: NavController) {
     var textState = remember { mutableStateOf(TextFieldValue("")) }
     var jobState = remember { mutableStateListOf<JobInfoData>()}
 
-    Surface {
-        Column {
+    Surface (
+    ) {
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .background(whiteBackground)
+        ) {
             SearchJobBar(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -101,7 +107,9 @@ fun JobInfoList(
     var names : List<JobInfoData> = jobState
 
     LazyColumn(
-        modifier = Modifier.padding(vertical = 4.dp)
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .background(whiteBackground)
     ) {
 //        items(items = names) { name ->
 //            ListItem(name = name)
