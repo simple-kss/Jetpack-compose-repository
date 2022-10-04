@@ -50,7 +50,6 @@ fun CommunityPage(navController: NavController) {
             }
             var articles = FirebaseManager.read_articles()
             LazyColumnWithArticles(articles, navController)
-
             // 이거로 레이지컬럼 뿌려저야댐
             // https://www.youtube.com/watch?v=V-3sLO_TWl0&ab_channel=HoodLab
         }
@@ -78,7 +77,7 @@ fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navControll
 @Composable
 fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
     Card(
-        Modifier
+        modifier = Modifier
             .padding(12.dp)
 //             테투리 굵은석
 //            .border(width = 4.dp, color = Color.Black)

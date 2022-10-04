@@ -27,10 +27,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.ApiManager
-import com.learnandroid.loginapplication.CertiInfoManager
-import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.composables.TAG
-import com.learnandroid.loginapplication.data.CertificateInfo
 import com.learnandroid.loginapplication.data.JobInfoData
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
@@ -72,7 +69,8 @@ fun JobSearchInfo(navController: NavController) {
 
             JobInfoList(
                 textState,
-                jobState
+                jobState,
+                navController
             )
         }
 //
@@ -92,14 +90,15 @@ fun JobSearchInfo(navController: NavController) {
 @Composable
 fun JobInfoList(
     state: MutableState<TextFieldValue>,
-    jobState: SnapshotStateList<JobInfoData>
+    jobState: SnapshotStateList<JobInfoData>,
+    navController: NavController
 ) {
 //    state.value.text
-    var listSize: Int
+//    var listSize: Int
     if (state.value.text == null || state.value.text.equals("")) {
-        listSize = 0
+//        listSize = 0
     } else {
-        listSize = 10
+//        listSize = 10
         // state.value.text.toInt()
     }
 
@@ -116,9 +115,10 @@ fun JobInfoList(
 //        }
 
         items(items = names) { data ->
-            JobItem(data = data)
+            JobItem(data = data, navController)
         }
     }
+
 }
 
 @Composable
@@ -247,8 +247,14 @@ fun JobInfoRow2(name : String) {
                         fontWeight = FontWeight.ExtraBold
                     ))
                 }
-                OutlinedButton(onClick = { expanded.value = !expanded.value }) {
-                    Text(if (expanded.value) "Show less" else "Show more")
+                OutlinedButton(
+                    modifier = Modifier
+                        .background(Color.Black),
+                    onClick = { expanded.value = !expanded.value }
+                ) {
+                    Text(
+                        color = Color.White,
+                        text = if (expanded.value) "Show less" else "Show more")
                 }
             }
 

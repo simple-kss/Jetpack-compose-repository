@@ -1,6 +1,10 @@
 package com.learnandroid.loginapplication.composables.JobSearch
 
+import android.content.Intent
+import android.net.Uri
+import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -14,13 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -38,6 +40,7 @@ import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun ListItem(name : String){
@@ -83,8 +86,8 @@ fun ListItem(name : String){
 }
 
 @Composable
-fun JobItem(data : JobInfoData){
-    val expanded = remember { mutableStateOf(false)}
+fun JobItem(data: JobInfoData, navController: NavController){
+    val expanded = remember { mutableStateOf(false) }
     val extraPadding by animateDpAsState(
         if (expanded.value) 24.dp else 0.dp,
         animationSpec = spring(
@@ -92,6 +95,7 @@ fun JobItem(data : JobInfoData){
             stiffness = Spring.StiffnessLow
         )
     )
+    var showWebView by remember { mutableStateOf(false) }
 
     Surface(
         color = MaterialTheme.colors.primary,
@@ -102,10 +106,10 @@ fun JobItem(data : JobInfoData){
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .defaultMinSize(minHeight = 100.dp)
             .clip(RoundedCornerShape(30.dp))
             .background(primaryColor)
-            .padding(5.dp)
+            .padding(10.dp)
         ) {
             ProvideTextStyle(TextStyle(color = Color.White)) {
                 Row (
@@ -124,8 +128,15 @@ fun JobItem(data : JobInfoData){
                             )
                         }
                     }
-                    OutlinedButton(onClick = { expanded.value = !expanded.value }) {
-                        Text(if (expanded.value) "Show less" else "Show more")
+                    OutlinedButton(
+                        onClick = { expanded.value = !expanded.value },
+                        modifier = Modifier
+                            .background(Color.Black)
+                            .clip(RoundedCornerShape(5.dp))
+                    ) {
+                        Text(
+                            color = Color.White,
+                            text = if (expanded.value) "Show less" else "Show more")
                     }
                 }
                 if (expanded.value){
@@ -149,11 +160,46 @@ fun JobItem(data : JobInfoData){
                         Text(text = "최대월급: " + data.maxSal.toString() + "원")
                         Text(text = "근무형태: " + data.holidayTpNm.toString())
 
-                        Text(text = "링크", fontWeight = FontWeight.Bold)
                         val infoUrl = URLEncoder.encode(data.wantedInfoUrl.toString(),
                             StandardCharsets.UTF_8.toString())
-                        Text(text = data.wantedInfoUrl.toString())
-                        Text(text = data.wantedMobileInfoUrl.toString())
+                        val context = LocalContext.current
+                        Button(
+                            onClick = {
+                                showWebView = !showWebView
+//                                context.startActivity(
+//                                    Intent(Intent.ACTION_VIEW).also {
+//                                        it.data =  Uri.parse(infoUrl)
+//                                    }
+//                                )
+//                                AndroidView(factory = {
+//                                    WebView(it).apply {
+//                                        layoutParams = ViewGroup.LayoutParams(
+//                                            ViewGroup.LayoutParams.MATCH_PARENT,
+//                                            ViewGroup.LayoutParams.MATCH_PARENT
+//                                        )
+//                                        webViewClient = WebViewClient()
+//                                        loadUrl(infoUrl)
+//                                    }
+//                                }, update = {
+//                                    it.loadUrl(infoUrl)
+
+//                                if(showWebView) {
+//                                    WebPageScreen(infoUrl)
+//                                }
+                            }
+                        ) {
+                            Text(text = "링크", fontWeight = FontWeight.Bold)
+                            Text(text = data.wantedInfoUrl.toString())
+                        }
+
+
+
+                        Button(
+                            onClick = {}
+                        ) {
+                            Text(text = "모바일링크", fontWeight = FontWeight.Bold)
+                            Text(text = data.wantedMobileInfoUrl.toString())
+                        }
 
 //                    val str: String = data.toString()
 //                    Text(text = str)
@@ -187,4 +233,39 @@ fun JobItem(data : JobInfoData){
 @Composable
 fun ListPreview() {
 //    ListItem("123")
+}
+
+//@Composable
+//fun WebViewPart(webViewState: WebViewState) {
+//    if (webViewState.isLoading) {
+//        LinearProgressIndicator(
+//            modifier = Modifier.fillMaxWidth(),
+//            color = Color.Red
+//        )
+//    }
+//    WebView (
+//        state = webViewState,
+//        modifier = Modifier.fillMaxWidth(),
+//        onCreated = { webView ->
+//            // TODO
+//        }
+//    )
+//
+//}
+
+
+@Composable
+fun WebPageScreen(infoUrl: String) {
+    AndroidView(factory = {
+        WebView(it).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            webViewClient = WebViewClient()
+            loadUrl(infoUrl)
+        }
+    }, update = {
+        it.loadUrl(infoUrl)
+    })
 }
