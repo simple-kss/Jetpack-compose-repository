@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             ) { backStackEntry ->
 //                val authorId = 1
                 val pageId = backStackEntry.arguments!!.getString("pageId")!!
-                ArticleInfoPage(pageId)
+                ArticleInfoPage(pageId, navController = navController)
             }
         })
     }

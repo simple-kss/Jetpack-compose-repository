@@ -48,7 +48,6 @@ fun Home(
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)

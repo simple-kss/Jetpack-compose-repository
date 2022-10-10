@@ -6,15 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +22,8 @@ import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 @Composable
 fun CommunityPage(navController: NavController) {
@@ -59,7 +59,10 @@ fun CommunityPage(navController: NavController) {
 @Composable
 fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navController: NavController) {
     LazyColumn(
-        modifier = Modifier.padding(vertical = 4.dp)
+
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .background(whiteBackground),
     ) {
         Log.d(TAG, "!!!!!!!!  list.size: " + articles.size);
         itemsIndexed(
@@ -67,36 +70,68 @@ fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navControll
 //            listOf(100, 200, 300)
         ) { index, item ->
             KotlinWorldCard(order = item, navController)
-            Spacer(modifier = Modifier
-                .border(width = 1.dp, color = Color.LightGray))
+//            Spacer(modifier = Modifier
+//                .height(1.dp)
+//                .fillMaxWidth()
+//                .background(color = Color.LightGray)
+//            )
+//            Spacer(modifier = Modifier
+//                .padding(20.dp)
+//
+//            )
+
+//            Spacer(modifier = Modifier
+//                .border(width = 10.dp, color = Color.LightGray))
         }
     }
-
 }
 
 @Composable
 fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
+    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd hh-mm-ss")
+
     Card(
+//        elevation = 0.dp,
+//        backgroundColor = Color.White,
         modifier = Modifier
-            .padding(12.dp)
+            .padding(20.dp)
 //             테투리 굵은석
 //            .border(width = 4.dp, color = Color.Black)
-            .background(whiteBackground)
             .fillMaxWidth()
             .height(100.dp)
+
     ) {
-        Button(
-            onClick = {
-                navController.navigate("ArticleInfoPage/${order.id}")
-            }
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .background(whiteBackground),
         ) {
-            Column() {
-                Text("${order.id}")
-                Text("${order.email}")
-                Text("${order.title}")
-                Text("${order.contents}")
+            Button(
+                elevation = null,
+                colors = ButtonDefaults.buttonColors(whiteBackground),
+                modifier = Modifier
+                    .background(whiteBackground),
+                onClick = {
+                    navController.navigate("ArticleInfoPage/${order.id}")
+                }
+            ) {
+                ProvideTextStyle(TextStyle(color = Color.Black)) {
+                    Column(
+                    ) {
+//                    Text("${order.id}")
+//                    Text("${order.email}")
+                        Text("${order.title}")
+                        Text(
+                            text = "${order.contents}",
+                            maxLines = 2
+                        )
+                        Text(
+                            text = df.format(order.date),
+                            color = Color.LightGray
+                        )
+                    }
+                }
             }
-//            Box(contentAlignment = Alignment.Center)
         }
     }
 }

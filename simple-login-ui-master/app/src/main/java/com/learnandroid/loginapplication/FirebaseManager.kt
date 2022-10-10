@@ -10,10 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.data.CertificateInfo
+import com.learnandroid.loginapplication.data.Comment
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 // Not need it
 class FirebaseManager {
@@ -149,12 +154,14 @@ class FirebaseManager {
                         var member_email = document.data.get("member_email")
                         var title = document.data.get("title")
                         var contents = document.data.get("contents")
+                        var date = document.getTimestamp("date")?.toDate()
 
                         var info : ArticleInfo = ArticleInfo(
                             id,
                             member_email as String,
                             title as String,
-                            contents as String
+                            contents as String,
+                            date as Date
                         )
                         Log.d(TAG, "document member_email: " + member_email
                                 + ", title: " + title
@@ -163,6 +170,42 @@ class FirebaseManager {
                         list.add(info)
                     }
                 } // collection end
+//            list.sortedWith(compareBy({ it.date }))
+//            list.sortWith(compareBy<ArticleInfo> { it.date })
+            return list
+        }
+
+        fun read_comments(originDocumentId: String): SnapshotStateList<Comment> {
+            val userEmail = auth?.currentUser?.email
+            var list: SnapshotStateList<Comment> = mutableStateListOf<Comment>()
+
+            // 데이터 읽기
+            firestore.collection("comments")
+                .whereEqualTo("document_id", originDocumentId)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        // 리스트에 다 넣어야 됨
+                        // CertificateInfo
+                        var documentId = document.data.get("document_id")
+                        var member_email = document.data.get("member_email")
+                        var contents = document.data.get("contents")
+                        var date = document.getTimestamp("date")?.toDate()
+
+                        var comment : Comment = Comment(
+                            documentId as String,
+                            member_email as String,
+                            contents as String,
+                            date as Date
+                        )
+                        Log.d(TAG, "document member_email: " + member_email
+                                + ", contents: " + contents
+                        )
+                        list.add(comment)
+                    }
+                } // collection end
+//            list.sortedWith(compareBy({ it.date }))
+//            list.sortWith(compareBy<ArticleInfo> { it.date })
             return list
         }
 
@@ -269,6 +312,10 @@ class FirebaseManager {
         }
 
         fun write_artice(title: String, contents: String) {
+            var currentDate = Date()
+//            var df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+//            var currentDataWithFormat = df.format(currentDate)
+
             val userEmail = auth?.currentUser?.email
             if (title == null) {
                 Log.e(TAG, "acquire error")
@@ -282,9 +329,42 @@ class FirebaseManager {
                 "member_email" to userEmail,
                 "title" to title,
                 "contents" to contents,
+                "date" to currentDate,
             )
             firestore.collection("articles")
                 .add(articleInfo)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
+        }
+
+        fun write_comment(documentId: String, contents: String)
+        {
+            var currentDate = Date()
+
+            val userEmail = auth?.currentUser?.email
+            if (contents == null) {
+                Log.e(TAG, "contents error")
+                return
+            }
+            if (documentId == null) {
+                Log.e(TAG, "documentId error")
+                return
+            }
+
+            Log.d(TAG, "write_comment called")
+            // 데이터 쓰기
+            var commentInfo = hashMapOf(
+                "member_email" to userEmail,
+                "document_id" to documentId,
+                "contents" to contents,
+                "date" to currentDate,
+            )
+            firestore.collection("comments")
+                .add(commentInfo)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 }
@@ -355,12 +435,14 @@ class FirebaseManager {
                         var member_email = document.data.get("member_email")
                         var title = document.data.get("title")
                         var contents = document.data.get("contents")
+                        var date = document.getTimestamp("date")?.toDate()
 
                         readArticleById.value = ArticleInfo(
                             id,
                             member_email as String,
                             title as String,
-                            contents as String
+                            contents as String,
+                            date as Date
                         )
                         Log.d(TAG, "read_article_by_id" +
                                 " document member_email: " + member_email

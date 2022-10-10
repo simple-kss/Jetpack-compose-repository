@@ -2,10 +2,9 @@ package com.learnandroid.loginapplication.data
 
 import java.util.*
 
-data class ArticleInfo (
-    var id: String?,
+data class Comment(
+    var documentId: String?,
     var email: String?,
-    var title: String?,
     var contents: String?,
     var date: Date?
 )

@@ -132,7 +132,7 @@ fun contentItems(navController: NavController) {
                     }
                 }
                 Button(
-                    onClick = { visibleInterested = !visibleInterested },
+                    onClick = { acquireInterested = !acquireInterested },
                     colors = ButtonDefaults.buttonColors(whiteBackground),
                     border = BorderStroke(0.dp, whiteBackground),
                     elevation = null
@@ -143,39 +143,59 @@ fun contentItems(navController: NavController) {
                         fontSize = 30.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
+                    Text(
+                        text = if (acquireInterested) {
+                            AnnotatedString("    ▲ 접기")
+                        } else {
+                            AnnotatedString("    ▶ 펼치기")
+                        },
+                        color = Color.Gray,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
-                if (visibleInterested) {
+                if (acquireInterested) {
                     Column {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
                         acquire = FirebaseManager.read_my_acquire()
                         interestedList(acquire)
-                        Row(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(15.dp))
-                                .background(primaryColor)
-                                .fillMaxWidth()
-                                .size(300.dp, 100.dp),
-                        ) {
-                            Text(text = "2012년 2월 18일", fontSize = 20.sp, color = whiteBackground)
-                            Text(text = "정보처리기사", fontSize = 20.sp, color = whiteBackground)
-                        }
+//                        Row(
+//                            modifier = Modifier
+//                                .clip(RoundedCornerShape(15.dp))
+//                                .background(primaryColor)
+//                                .fillMaxWidth()
+//                                .size(300.dp, 100.dp),
+//                        ) {
+//                            Text(text = "2012년 2월 18일", fontSize = 20.sp, color = whiteBackground)
+//                            Text(text = "정보처리기사", fontSize = 20.sp, color = whiteBackground)
+//                        }
                     }
                 }
                 Button(
-                    onClick = { acquireInterested = !acquireInterested },
+                    onClick = { visibleInterested = !visibleInterested },
                     colors = ButtonDefaults.buttonColors(whiteBackground),
                     border = BorderStroke(0.dp, whiteBackground),
                     elevation = null
                 ) {
                     Text(
-                        text = "관심 자격증 목록",
+                        text = AnnotatedString("관심 자격증 목록"),
                         color = Color.Black,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
+                    Text(
+                        text = if (visibleInterested) {
+                            AnnotatedString("    ▲ 접기")
+                        } else {
+                            AnnotatedString("    ▶ 펼치기")
+                        },
+                        color = Color.Gray,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
-                if (acquireInterested) {
+                if (visibleInterested) {
                     Column {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
@@ -232,14 +252,15 @@ fun interestedRow(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Column(modifier = Modifier
-            .padding(24.dp)
+            .padding(20.dp)
             .fillMaxWidth()) {
             Row (
                 modifier = Modifier
-                    .width(100.dp)
+                    .width(200.dp)
                     .background(primaryColor),
             ) {
                 Text(
+                    fontSize = 18.sp,
                     color = Color.White,
                     text = "" + order.name
                 )
