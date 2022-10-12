@@ -25,8 +25,12 @@ import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.CertificateInfo
 import com.learnandroid.loginapplication.data.JobInfoData
+import com.learnandroid.loginapplication.data.UserCertificateInfo
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun MyPage(navController: NavController) {
@@ -37,8 +41,8 @@ fun MyPage(navController: NavController) {
 @Composable
 // navController: NavController
 fun contentItems(navController: NavController) {
-    var interested = remember { mutableStateListOf<CertificateInfo>() }
-    var acquire = remember { mutableStateListOf<CertificateInfo>() }
+    var interested = remember { mutableStateListOf<UserCertificateInfo>() }
+    var acquire = remember { mutableStateListOf<UserCertificateInfo>() }
 
     var user = Firebase.auth.currentUser
     var displayName: String? = null
@@ -160,6 +164,7 @@ fun contentItems(navController: NavController) {
                         // 레이지컬럼으로 바로해줘야함.
                         acquire = FirebaseManager.read_my_acquire()
                         interestedList(acquire)
+//                        interestedList(acquire)
 //                        Row(
 //                            modifier = Modifier
 //                                .clip(RoundedCornerShape(15.dp))
@@ -219,7 +224,7 @@ fun contentItems(navController: NavController) {
 }
 
 @Composable
-fun interestedList(list: List<CertificateInfo>) {
+fun interestedList(list: List<UserCertificateInfo>) {
     LazyColumn(
         modifier = Modifier
             .padding(vertical = 4.dp)
@@ -242,7 +247,7 @@ fun interestedList(list: List<CertificateInfo>) {
 
 @Composable
 fun interestedRow(
-    order: CertificateInfo
+    order: UserCertificateInfo
 //    order: Int
 ) {
     val name = order.name
@@ -256,7 +261,7 @@ fun interestedRow(
             .fillMaxWidth()) {
             Row (
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(280.dp)
                     .background(primaryColor),
             ) {
                 Text(
@@ -264,9 +269,19 @@ fun interestedRow(
                     color = Color.White,
                     text = "" + order.name
                 )
+                if (order.date != null && order.date != Date(0)) {
+                    val df: DateFormat = SimpleDateFormat("yyyy/MM/dd")
+                    Text(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        text = " (" + df.format(order.date) + ")"
+                    )
+                }
 //                            Text("" + order)
             }
         }
     }
 }
+
+
 

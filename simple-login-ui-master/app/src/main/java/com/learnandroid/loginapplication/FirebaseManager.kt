@@ -2,8 +2,7 @@ package com.learnandroid.loginapplication
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.data.CertificateInfo
 import com.learnandroid.loginapplication.data.Comment
+import com.learnandroid.loginapplication.data.UserCertificateInfo
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -88,9 +88,9 @@ class FirebaseManager {
                     Log.w(TAG, "Error getting documents.", exception)
                 }
         }
-        fun read_my_interested(): SnapshotStateList<CertificateInfo> {
+        fun read_my_interested(): SnapshotStateList<UserCertificateInfo> {
             val userEmail = auth?.currentUser?.email
-            var list: SnapshotStateList<CertificateInfo> = mutableStateListOf<CertificateInfo>()
+            var list: SnapshotStateList<UserCertificateInfo> = mutableStateListOf<UserCertificateInfo>()
 
             Log.d(TAG, "!!!! userEmail: " + userEmail)
 
@@ -104,8 +104,12 @@ class FirebaseManager {
                         // CertificateInfo
                         var name = document.data.get("certificated_name")
                         var category = document.data.get("certificated_category")
-                        var info:CertificateInfo = CertificateInfo(name as String,
-                            category as String)
+                        var date = Date(0)
+                        var info:UserCertificateInfo = UserCertificateInfo(
+                            name as String,
+                            category as String,
+                            date
+                        )
                         Log.d(TAG, "document name: " + document + ", category: " + category)
                         list.add(info)
                     }
@@ -113,9 +117,9 @@ class FirebaseManager {
             return list
         }
 
-        fun read_my_acquire(): SnapshotStateList<CertificateInfo> {
+        fun read_my_acquire(): SnapshotStateList<UserCertificateInfo> {
             val userEmail = auth?.currentUser?.email
-            var list: SnapshotStateList<CertificateInfo> = mutableStateListOf<CertificateInfo>()
+            var list: SnapshotStateList<UserCertificateInfo> = mutableStateListOf<UserCertificateInfo>()
 
             Log.d(TAG, "!!!! userEmail: " + userEmail)
 
@@ -129,8 +133,12 @@ class FirebaseManager {
                         // CertificateInfo
                         var name = document.data.get("certificated_name")
                         var category = document.data.get("certificated_category")
-                        var info:CertificateInfo = CertificateInfo(name as String,
-                            category as String)
+                        var date = document.getTimestamp("acquire_date")?.toDate()
+                        var info: UserCertificateInfo = UserCertificateInfo(
+                            name as String,
+                            category as String,
+                            date as Date
+                        )
                         Log.d(TAG, "document name: " + document + ", category: " + category)
                         list.add(info)
                     }
@@ -261,9 +269,27 @@ class FirebaseManager {
             } // collection end
         }
 
-        fun write_my_acquire(certificateName: String, category: String) {
+        fun write_my_acquire(
+            certificateName: String,
+            category: String,
+            updatedDate: Long
+        ) {
             val userEmail = auth?.currentUser?.email
             var duplicated = false
+
+            var datePicked : String? = null
+//            var acquireDate = updatedDate
+//            acquireDate = { date : Long? ->
+//                datePicked = DateFormater(date)
+//                Log.e(TAG, "oliver486 write_my_acquire (date)" + date)
+//            }
+//            var currentDate = Date()
+            var currentDate = Date(updatedDate)
+
+//            Log.e(TAG, "oliver486 write_my_acquire  " + updatedDate + ", " + currentDate)
+//            Log.e(TAG, "oliver486 write_my_acquire(DateFormater)  " + DateFormater(updatedDate))
+//            Log.e(TAG, "oliver486 write_my_acquire(currentDate2)  " + currentDate)
+
             if (certificateName == null) {
                 Log.e(TAG, "acquire error")
             }
@@ -297,6 +323,7 @@ class FirebaseManager {
                             "member_email" to userEmail,
                             "certificated_name" to certificateName,
                             "certificated_category" to category,
+                            "acquire_date" to currentDate,
                         )
                         // 여기서 acquire 테이블 이름
                         firestore.collection("acquire")
@@ -309,6 +336,27 @@ class FirebaseManager {
                             }
                     }
                 } // collection end
+        }
+
+        // output: 12/10/2022
+        fun DateFormater(milliseconds : Long?) : String?{
+            milliseconds?.let{
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                val calendar: Calendar = Calendar.getInstance()
+                calendar.setTimeInMillis(it)
+                return formatter.format(calendar.getTime())
+            }
+            return null
+        }
+
+        fun DateFormater_all_time(milliseconds : Long?) : String?{
+            milliseconds?.let{
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                val calendar: Calendar = Calendar.getInstance()
+                calendar.setTimeInMillis(it)
+                return formatter.format(calendar.getTime())
+            }
+            return null
         }
 
         fun write_artice(title: String, contents: String) {
@@ -484,4 +532,14 @@ class FirebaseManager {
         }
 
     }
+}
+
+fun DateFormater(milliseconds : Long?) : String?{
+    milliseconds?.let{
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(it)
+        return formatter.format(calendar.getTime())
+    }
+    return null
 }

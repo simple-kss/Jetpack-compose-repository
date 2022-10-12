@@ -1,6 +1,7 @@
 package com.learnandroid.loginapplication.composables
 
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,19 +17,18 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.learnandroid.loginapplication.CertiInfoManager
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
@@ -117,6 +117,19 @@ fun CertiRow(order: CertificateInfo) {
     val name = order.name
     val category = order.category
 
+    // date 관련
+    // https://sgkantamani.medium.com/how-to-show-date-picker-in-jetpack-compose-8bc77a3ce408
+    var datePicked : String? by remember {
+        mutableStateOf(null)
+    }
+    val activity = LocalContext.current as AppCompatActivity
+    
+    // -- date 관련 끝
+
+    val updatedDate = { date : Long? ->
+        datePicked = date?.toString()?:""
+    }
+
     Box(
         modifier = Modifier
             .padding(5.dp)
@@ -152,7 +165,7 @@ fun CertiRow(order: CertificateInfo) {
             }
             Button(onClick = {
                 Log.d(TAG, "acquire called")
-                FirebaseManager.write_my_acquire(name, category)
+                showDatePicker(activity, name, category, updatedDate)
             }) {
                 Text(
                     text = "취득"
@@ -167,6 +180,80 @@ fun CertiRow(order: CertificateInfo) {
                 )
             }
         }
+    }
+}
+
+//@Composable
+//fun DatePickerview(
+//    datePicked : String?,
+//    updatedDate : ( date : Long? ) -> Unit,
+//) {
+//    val activity = LocalContext.current as AppCompatActivity
+//
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .wrapContentSize(Alignment.TopStart)
+//            .padding(top = 10.dp)
+//            .border(0.5.dp, MaterialTheme.colors.onSurface.copy(alpha = 0.5f))
+//            .clickable{
+//                showDatePicker(activity, updatedDate)
+//            }
+//    ) {
+//
+//        ConstraintLayout(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp)
+//        ) {
+//
+//            val (lable, iconView) = createRefs()
+//
+//            Text(
+//                text= datePicked?:"Date Picker",
+//                color = MaterialTheme.colors.onSurface,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .constrainAs(lable) {
+//                        top.linkTo(parent.top)
+//                        bottom.linkTo(parent.bottom)
+//                        start.linkTo(parent.start)
+//                        end.linkTo(iconView.start)
+//                        width = Dimension.fillToConstraints
+//                    }
+//            )
+//
+//            Icon(
+//                imageVector = Icons.Default.DateRange,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .size(20.dp, 20.dp)
+//                    .constrainAs(iconView) {
+//                        end.linkTo(parent.end)
+//                        top.linkTo(parent.top)
+//                        bottom.linkTo(parent.bottom)
+//                    },
+//                tint = MaterialTheme.colors.onSurface
+//            )
+//
+//        }
+//
+//    }
+//}
+
+private fun showDatePicker(
+    activity : AppCompatActivity,
+    name: String,
+    category: String,
+    updatedDate: (Long?) -> Unit,
+) {
+
+    Log.d(TAG, "Before write_my_acquire ")
+    val picker = MaterialDatePicker.Builder.datePicker().build()
+    picker.show(activity.supportFragmentManager, picker.toString())
+    picker.addOnPositiveButtonClickListener {
+        updatedDate(it)
+        FirebaseManager.write_my_acquire(name, category, it.toLong())
     }
 }
 
