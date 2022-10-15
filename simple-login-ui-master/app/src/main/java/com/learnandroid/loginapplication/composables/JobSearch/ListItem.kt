@@ -52,10 +52,8 @@ fun ListItem(name : String){
             stiffness = Spring.StiffnessLow
         )
     )
-
     Surface(color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
-
         Column(modifier = Modifier
             .padding(24.dp)
             .fillMaxWidth()) {

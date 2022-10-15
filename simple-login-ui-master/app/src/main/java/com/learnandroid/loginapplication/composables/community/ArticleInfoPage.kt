@@ -72,10 +72,11 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                         Text(
                             text = it,
                             modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
                                 .fillMaxWidth()
-                                .height(30.dp)
+                                .height(50.dp)
+                                .padding(5.dp)
                                 .background(uGray1)
+                                .clip(RoundedCornerShape(20.dp))
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -83,10 +84,11 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                         Text(
                             text = it,
                             modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
                                 .fillMaxWidth()
-                                .height(30.dp)
+                                .height(50.dp)
+                                .padding(5.dp)
                                 .background(uGray1)
+                                .clip(RoundedCornerShape(20.dp))
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -94,10 +96,11 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                         Text(
                             text = it,
                             modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
                                 .fillMaxWidth()
                                 .height(300.dp)
+                                .padding(5.dp)
                                 .background(uGray1)
+                                .clip(RoundedCornerShape(20.dp))
                         )
                     }
                 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.ApiManager
 import com.learnandroid.loginapplication.composables.TAG
@@ -53,8 +55,17 @@ fun JobSearchInfo(navController: NavController) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(whiteBackground)
+                .background(whiteBackground),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "구직정보 검색",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(20.dp))
             SearchJobBar(
                 modifier = Modifier
                     .fillMaxWidth()

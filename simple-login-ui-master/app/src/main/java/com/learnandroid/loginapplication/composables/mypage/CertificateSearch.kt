@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,17 +23,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.learnandroid.loginapplication.CertiInfoManager
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.data.CertificateInfo
+import com.learnandroid.loginapplication.ui.theme.uGray2
+import com.learnandroid.loginapplication.ui.theme.uGray3
+import com.learnandroid.loginapplication.ui.theme.uGray4
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 /*
@@ -52,22 +58,29 @@ fun CertificateSearch(navController: NavController) {
 @Composable
 fun CertificateSearchContents() {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-
     Surface(
         color = whiteBackground,
         modifier = Modifier
             .background(whiteBackground)
             .fillMaxSize()
     ) {
-        Column {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.cat_1),
-                contentDescription = "Pokemon",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(CenterHorizontally)
+            Text(
+                text = "자격증 검색",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.ExtraBold
             )
+            Spacer(modifier = Modifier.height(20.dp))
+//            Image(
+//                painter = painterResource(id = R.drawable.cat_1),
+//                contentDescription = "Pokemon",
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .align(CenterHorizontally)
+//            )
             SearchBar(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,7 +88,6 @@ fun CertificateSearchContents() {
                 hint = "Search...",
                 textState,
             ) {
-
             }
             // 여기에 검색된 리스트를 뿌려야함.
             Spacer(modifier = Modifier.height(16.dp))
@@ -90,7 +102,7 @@ fun CertiList(
 ) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 4.dp),
-        contentPadding = PaddingValues(16.dp)) {
+        contentPadding = PaddingValues(10.dp)) {
         var list = CertiInfoManager.getAllList()
         if (state.value != null && !state.value.text.equals("")) {
             list = CertiInfoManager.getListByCertiString(state.value.text)
@@ -116,46 +128,44 @@ fun CertiRow(order: CertificateInfo) {
     val user = FirebaseManager.auth?.currentUser
     val name = order.name
     val category = order.category
-
     // date 관련
     // https://sgkantamani.medium.com/how-to-show-date-picker-in-jetpack-compose-8bc77a3ce408
     var datePicked : String? by remember {
         mutableStateOf(null)
     }
     val activity = LocalContext.current as AppCompatActivity
-    
     // -- date 관련 끝
-
     val updatedDate = { date : Long? ->
         datePicked = date?.toString()?:""
     }
-
     Box(
         modifier = Modifier
-            .padding(5.dp)
+            .padding(0.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Row (
+        Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
-                .background(MaterialTheme.colors.primary)
+//                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+                .background(Color.White)
                 .fillMaxWidth()
-                .height(50.dp)
-                .padding(5.dp)
+                .height(100.dp)
+                .padding(6.dp),
         ) {
-            Card (
+            Card(
+                elevation = 0.dp,
                 modifier = Modifier
                     .width(200.dp)
-                    .background(MaterialTheme.colors.primary)
+                    .background(Color.White)
             ) {
                 Row(
                     modifier = Modifier
-                        .background(MaterialTheme.colors.primary)
+                        .background(Color.White)
                 ) {
                     Box {
                         Text(
-                            color = Color.White,
+                            color = Color.Black,
+                            fontWeight = FontWeight.ExtraBold,
                             text = "" + order.name,
-
                         )
                     }
 //                        Box() {
@@ -163,24 +173,45 @@ fun CertiRow(order: CertificateInfo) {
 //                        }
                 }
             }
-            Button(onClick = {
-                Log.d(TAG, "acquire called")
-                showDatePicker(activity, name, category, updatedDate)
-            }) {
+            Button(
+                modifier = Modifier
+                    .padding(2.dp),
+                elevation = null,
+                colors = ButtonDefaults.buttonColors(backgroundColor = uGray3),
+                onClick = {
+                    Log.d(TAG, "acquire called")
+                    showDatePicker(activity, name, category, updatedDate)
+                }
+            ) {
                 Text(
-                    text = "취득"
+                    text = "취득",
+                    color = Color.Black
                 )
             }
-            Button(onClick = {
-                Log.d(TAG, "interested called")
-                FirebaseManager.write_my_interested(name, category)
-            }) {
+            Button(
+                modifier = Modifier
+                    .padding(2.dp),
+                elevation = null,
+                colors = ButtonDefaults.buttonColors(backgroundColor = uGray3),
+                onClick = {
+                    Log.d(TAG, "interested called")
+                    FirebaseManager.write_my_interested(name, category)
+                }
+            ) {
                 Text(
-                    text = "관심"
+                    text = "관심",
+                    color = Color.Black
                 )
             }
         }
+        Spacer(
+            modifier = Modifier
+                .height(1.dp)
+                .width(400.dp)
+                .background(color = uGray4)
+        )
     }
+
 }
 
 //@Composable
@@ -305,7 +336,7 @@ fun SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(5.dp, CircleShape)
-                .background(Color.Gray, CircleShape)
+                .background(Color.White, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .onFocusChanged {
                     isHintDisplayed = !it.isFocused

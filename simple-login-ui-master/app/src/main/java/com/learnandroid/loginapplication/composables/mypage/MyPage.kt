@@ -6,25 +6,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.FirebaseManager
-import com.learnandroid.loginapplication.data.CertificateInfo
-import com.learnandroid.loginapplication.data.JobInfoData
 import com.learnandroid.loginapplication.data.UserCertificateInfo
 import com.learnandroid.loginapplication.ui.theme.primaryColor
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
@@ -65,7 +60,6 @@ fun contentItems(navController: NavController) {
         Log.d(TAG, "Real DisplayName: " + displayName + ", : " + email +
         ", : " + photoUrl)
     }
-
     var scrollState = rememberScrollState()
 
     Surface(
@@ -76,6 +70,7 @@ fun contentItems(navController: NavController) {
                 .fillMaxSize()
                 .background(whiteBackground)
                 .padding(30.dp)
+                .verticalScroll(scrollState)
 
         ) {
             Column(
@@ -163,7 +158,7 @@ fun contentItems(navController: NavController) {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
                         acquire = FirebaseManager.read_my_acquire()
-                        interestedList(acquire)
+                        interestedColumnList(acquire)
 //                        interestedList(acquire)
 //                        Row(
 //                            modifier = Modifier
@@ -205,22 +200,30 @@ fun contentItems(navController: NavController) {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
                         interested = FirebaseManager.read_my_interested()
-
-                        interestedList(interested)
-                        Row(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(15.dp))
-                                .background(primaryColor)
-                                .fillMaxWidth()
-                                .size(300.dp, 100.dp),
-                        ) {
-                            Text(text = "산업안전기사", fontSize = 20.sp, color = whiteBackground)
-                        }
+                        interestedColumnList(interested)
+//                        interestedList(interested)
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun interestedColumnList(list: List<UserCertificateInfo>) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+            .fillMaxWidth()
+            .background(primaryColor)
+//            .verticalScroll(state),
+    ) {
+        for (info in list) {
+            interestedRow(info)
+        }
+    }
+
 }
 
 @Composable

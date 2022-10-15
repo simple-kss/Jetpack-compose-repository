@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.ArticleInfo
+import com.learnandroid.loginapplication.ui.theme.uGray2
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -30,24 +31,46 @@ fun CommunityPage(navController: NavController) {
     Surface() {
         Column(
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
+            // 내용물 중앙으로 오게함.
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .fillMaxHeight()
                 .background(whiteBackground),
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "커뮤니티",
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                )
+                Button(
+                    elevation = null,
+                    onClick = {navController.navigate("article_write_page")},
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = whiteBackground)
+                ) {
+                    Text(
+                        text = "글작성",
+                        color = uGray2
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "홍길동님 안녕하세요.",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
-            Button(
-                onClick = {navController.navigate("article_write_page")}
-            ) {
-                Text(
-                    text = "글작성",
-                )
-            }
+
             var articles = FirebaseManager.read_articles()
             LazyColumnWithArticles(articles, navController)
             // 이거로 레이지컬럼 뿌려저야댐
@@ -120,7 +143,9 @@ fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
                     ) {
 //                    Text("${order.id}")
 //                    Text("${order.email}")
-                        Text("${order.title}")
+                        Text("${order.title}",
+                            fontWeight = FontWeight.ExtraBold
+                        )
                         Text(
                             text = "${order.contents}",
                             maxLines = 2

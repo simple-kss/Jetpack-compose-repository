@@ -42,9 +42,7 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
-import com.learnandroid.loginapplication.ui.theme.primaryColor
-import com.learnandroid.loginapplication.ui.theme.uGray
-import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import com.learnandroid.loginapplication.ui.theme.*
 
 @Composable
 fun RegisterPage(navController: NavController) {
@@ -58,18 +56,23 @@ fun RegisterPage(navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
     val confirmPasswordVisibility = remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Image(
-                painterResource(id = R.drawable.register_page),
-                contentDescription = "",
-            )
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+//        contentAlignment = Alignment.BottomCenter
+    ) {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.White),
+//            contentAlignment = Alignment.TopCenter
+//        ) {
+//            Image(
+//                painterResource(id = R.drawable.register_page),
+//                contentDescription = "",
+//            )
+//        }
 
         Column(
             modifier = Modifier
@@ -81,7 +84,7 @@ fun RegisterPage(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
                 Text(
-                    text = "Sign Up", fontSize = 30.sp,
+                    text = "회원가입", fontSize = 30.sp,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 2.sp
@@ -103,19 +106,20 @@ fun RegisterPage(navController: NavController) {
 //                                color = uGray
 //                            )
 //                    )
-
                     OutlinedTextField(
                         value = emailValue.value,
                         onValueChange = { emailValue.value = it },
-                        label = { Text(text = "Email Address") },
-                        placeholder = { Text(text = "Email Address") },
+                        label = { Text(text = "이메일", color = uGray4) },
+//                        placeholder = { Text(text = "Email Address") },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .border(
-                                width = 1.dp,
-                                color = uGray
-                            )
+                            .fillMaxWidth(0.8f),
+//                            .border(
+//                                width = 1.dp,
+//                                color = uGray
+//                            ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = uGray3)
                     )
 // 추후 업데이트 예정
 //                    OutlinedTextField(
@@ -136,15 +140,11 @@ fun RegisterPage(navController: NavController) {
                     OutlinedTextField(
                         value = passwordValue.value,
                         onValueChange = { passwordValue.value = it },
-                        label = { Text(text = "Password") },
-                        placeholder = { Text(text = "Password") },
+                        label = { Text(text = "비밀번호", color = uGray4) },
+//                        placeholder = { Text(text = "Password") },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .border(
-                                width = 1.dp,
-                                color = uGray
-                            ),
+                            .fillMaxWidth(0.8f),
                         trailingIcon = {
                             IconButton(onClick = {
                                 passwordVisibility.value = !passwordVisibility.value
@@ -157,6 +157,8 @@ fun RegisterPage(navController: NavController) {
                                 )
                             }
                         },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = uGray3),
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation()
                     )
@@ -164,15 +166,11 @@ fun RegisterPage(navController: NavController) {
                     OutlinedTextField(
                         value = confirmPasswordValue.value,
                         onValueChange = { confirmPasswordValue.value = it },
-                        label = { Text(text = "Confirm Password") },
-                        placeholder = { Text(text = "Confirm Password") },
+                        label = { Text(text = "비밀번호 확인", color = uGray4) },
+//                        placeholder = { Text(text = "Confirm Password") },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .border(
-                                width = 1.dp,
-                                color = uGray
-                            ),
+                            .fillMaxWidth(0.8f),
                         trailingIcon = {
                             IconButton(onClick = {
                                 confirmPasswordVisibility.value = !confirmPasswordVisibility.value
@@ -185,37 +183,43 @@ fun RegisterPage(navController: NavController) {
                                 )
                             }
                         },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = uGray3),
                         visualTransformation = if (confirmPasswordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation()
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Button(onClick = {
-                        Toast.makeText(context, "Button 클릭",
-                            Toast.LENGTH_LONG).show()
-                        // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
+                    Button(
+                        onClick = {
+                            Toast.makeText(context, "Button 클릭",
+                                Toast.LENGTH_LONG).show()
+                            // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
 
-                        // 새로 계정 만들기
-                        FirebaseManager.auth?.createUserWithEmailAndPassword(emailValue.value,
-                            confirmPasswordValue.value)
-                            ?.addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    // Login, 아이디와 패스워드가 맞았을 때
-                                    Toast.makeText(context, "계정 생성 완료",
-                                        Toast.LENGTH_LONG).show()
-                                } else {
-                                    // Show the error message, 아이디와 패스워드가 틀렸을 때
-                                    Toast.makeText(context, task.exception?.message,
-                                        Toast.LENGTH_LONG).show()
+                            // 새로 계정 만들기
+                            FirebaseManager.auth?.createUserWithEmailAndPassword(emailValue.value,
+                                confirmPasswordValue.value)
+                                ?.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        // Login, 아이디와 패스워드가 맞았을 때
+                                        Toast.makeText(context, "계정 생성 완료",
+                                            Toast.LENGTH_LONG).show()
+                                    } else {
+                                        // Show the error message, 아이디와 패스워드가 틀렸을 때
+                                        Toast.makeText(context, task.exception?.message,
+                                            Toast.LENGTH_LONG).show()
+                                    }
                                 }
-                            }
-                    }, modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(50.dp)) {
-                        Text(text = "회원가입 신청", fontSize = 20.sp)
+                            },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(50.dp),
+                        shape = RoundedCornerShape(50),
+                    ) {
+                        Text(text = "회원가입 신청", fontSize = 20.sp, color = Color.White)
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
-                        text = "Login Instead",
+                        text = "로그인 하기",
                         modifier = Modifier.clickable(onClick = {
                             navController.navigate("login_page"){
                                 launchSingleTop = true

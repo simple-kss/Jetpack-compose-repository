@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,8 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
-import com.learnandroid.loginapplication.ui.theme.primaryColor
-import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import com.learnandroid.loginapplication.ui.theme.*
 
 // 처음 앱을 킬때, 등장하게되는 화면입니다.
 // 이 화면은 MainActivity에서 기본적으로 실행하게 됩니다.
@@ -53,20 +53,20 @@ fun LoginPage(navController: NavController) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+            .fillMaxSize()
+            .background(Color.White)
+//        contentAlignment = Alignment.BottomCenter
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White), contentAlignment = Alignment.TopCenter
-        ) {
-            Image(
-                painterResource(id = R.drawable.login_image),
-                contentDescription = "",
-            )
-        }
-
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.White), contentAlignment = Alignment.TopCenter
+//        ) {
+//            Image(
+//                painterResource(id = R.drawable.login_image),
+//                contentDescription = "",
+//            )
+//        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -77,7 +77,6 @@ fun LoginPage(navController: NavController) {
                 .background(whiteBackground)
                 .padding(10.dp)
         ) {
-
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "로그인",
@@ -92,10 +91,18 @@ fun LoginPage(navController: NavController) {
                     OutlinedTextField(
                         value = emailValue.value,
                         onValueChange = { emailValue.value = it },
-                        label = { Text(text = "Email Address") },
-                        placeholder = { Text(text = "Email Address") },
+                        label = { Text(text = "이메일", color = uGray3) },
+//                        placeholder = { Text(text = "Email Address", color = uGray2) },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f),
+//                            .clip(RoundedCornerShape(30.dp))
+//                            .background(LightLightGray),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = uGray3),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            focusedBorderColor = Green,
+//                            unfocusedBorderColor = Yellow)
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     )
 
@@ -117,20 +124,22 @@ fun LoginPage(navController: NavController) {
                                 )
                             }
                         },
-                        label = { Text("Password") },
-                        placeholder = { Text(text = "Password") },
+                        label = { Text("비밀번호", color = uGray3) },
+//                        placeholder = { Text(text = "Password", color = uGray2) },
                         singleLine = true,
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .focusRequester(focusRequester = focusRequester),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            backgroundColor = uGray5,
+                            unfocusedBorderColor = uGray3),
 //                        onImeActionPerformed = { _, controller ->
 //                            controller?.hideSoftwareKeyboard()
 //                        }
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     )
-
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(
                         // 내가 추가한 부분
@@ -154,21 +163,21 @@ fun LoginPage(navController: NavController) {
                                             Toast.LENGTH_LONG).show()
                                     }
                                 }
-
                             Log.d("OLIVER486", "value : " + passwordValue.value)
                             Log.d("OLIVER486", "value : " + emailValue.value)
                         },
-                        shape = RoundedCornerShape(25),
+                        shape = RoundedCornerShape(50),
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .height(50.dp)
                     ) {
-                        Text(text = "로그인", fontSize = 20.sp)
+                        Text(text = "로그인", fontSize = 20.sp, color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
                         text = "계정 생성",
+                        color = uGray2,
                         modifier = Modifier.clickable(onClick = {
                             navController.navigate("register_page"){
                             }
