@@ -2,6 +2,7 @@ package com.learnandroid.loginapplication.composables.JobSearch
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,13 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.MainViewModel
 import com.learnandroid.loginapplication.data.Cat
@@ -157,47 +165,111 @@ fun JobItem(data: JobInfoData, navController: NavController){
                         Text(text = "최소월급: " + data.minSal.toString() + "원")
                         Text(text = "최대월급: " + data.maxSal.toString() + "원")
                         Text(text = "근무형태: " + data.holidayTpNm.toString())
-
-                        val infoUrl = URLEncoder.encode(data.wantedInfoUrl.toString(),
+                        
+                        val infoUrl:String = URLEncoder.encode(data.wantedInfoUrl.toString(),
                             StandardCharsets.UTF_8.toString())
                         val context = LocalContext.current
-                        Button(
+                        
+                        Log.d("oliver486", "oliver486(infoUrl): " + infoUrl)
+                        Log.d("oliver486", "oliver486(wantedInfoUrl): " +
+                                data.wantedInfoUrl.toString())
+
+                        // https://stackoverflow.com/questions/65567412/jetpack-compose-text-hyperlink-some-section-of-the-text
+                        val annotatedLinkString: AnnotatedString = buildAnnotatedString {
+                            val str = data.wantedInfoUrl.toString()
+                            val startIndex = 0
+                            val endIndex = str.length
+//                            val str = "Click this link to go to web site"
+//                            val startIndex = str.indexOf("link")
+//                            val endIndex = startIndex + 4
+                            append(str)
+                            addStyle(
+                                style = SpanStyle(
+                                    color = Color(0xff64B5F6),
+                                    fontSize = 18.sp,
+                                    textDecoration = TextDecoration.Underline
+                                ), start = startIndex, end = endIndex
+                            )
+                            // attach a string annotation that stores a URL to the text "link"
+                            addStringAnnotation(
+                                tag = "URL",
+                                annotation = data.wantedInfoUrl.toString(),
+//                                annotation = "http://github.com",
+                                start = startIndex,
+                                end = endIndex
+                            )
+                        }
+                        // UriHandler parse and opens URI inside AnnotatedString Item in Browse
+                        val uriHandler = LocalUriHandler.current
+
+                        // Clickable text returns position of text that is clicked in onClick callback
+                        Text(text = "웹링크")
+                        ClickableText(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            text = annotatedLinkString,
                             onClick = {
-                                showWebView = !showWebView
-//                                context.startActivity(
-//                                    Intent(Intent.ACTION_VIEW).also {
-//                                        it.data =  Uri.parse(infoUrl)
-//                                    }
-//                                )
-//                                AndroidView(factory = {
-//                                    WebView(it).apply {
-//                                        layoutParams = ViewGroup.LayoutParams(
-//                                            ViewGroup.LayoutParams.MATCH_PARENT,
-//                                            ViewGroup.LayoutParams.MATCH_PARENT
-//                                        )
-//                                        webViewClient = WebViewClient()
-//                                        loadUrl(infoUrl)
-//                                    }
-//                                }, update = {
-//                                    it.loadUrl(infoUrl)
-
-//                                if(showWebView) {
-//                                    WebPageScreen(infoUrl)
-//                                }
+                                annotatedLinkString
+                                    .getStringAnnotations("URL", it, it)
+                                    .firstOrNull()?.let { stringAnnotation ->
+                                        uriHandler.openUri(stringAnnotation.item)
+                                    }
                             }
-                        ) {
-                            Text(text = "링크", fontWeight = FontWeight.Bold)
-                            Text(text = data.wantedInfoUrl.toString())
+                        )
+
+                        val annotatedMobileLinkString: AnnotatedString = buildAnnotatedString {
+                            val str = data.wantedMobileInfoUrl.toString()
+                            val startIndex = 0
+                            val endIndex = str.length
+//                            val str = "Click this link to go to web site"
+//                            val startIndex = str.indexOf("link")
+//                            val endIndex = startIndex + 4
+                            append(str)
+                            addStyle(
+                                style = SpanStyle(
+                                    color = Color(0xff64B5F6),
+                                    fontSize = 18.sp,
+                                    textDecoration = TextDecoration.Underline
+                                ), start = startIndex, end = endIndex
+                            )
+                            // attach a string annotation that stores a URL to the text "link"
+                            addStringAnnotation(
+                                tag = "URL",
+                                annotation = data.wantedMobileInfoUrl.toString(),
+                                start = startIndex,
+                                end = endIndex
+                            )
                         }
+                        Text(text = "모바일링크")
+                        ClickableText(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            text = annotatedMobileLinkString,
+                            onClick = {
+                                annotatedMobileLinkString
+                                    .getStringAnnotations("URL", it, it)
+                                    .firstOrNull()?.let { stringAnnotation ->
+                                        uriHandler.openUri(stringAnnotation.item)
+                                    }
+                            }
+                        )
 
-
-
-                        Button(
-                            onClick = {}
-                        ) {
-                            Text(text = "모바일링크", fontWeight = FontWeight.Bold)
-                            Text(text = data.wantedMobileInfoUrl.toString())
-                        }
+//                        Button(
+//                            onClick = {
+//                                showWebView = !showWebView
+//                            }
+//                        ) {
+//                            Text(text = "링크", fontWeight = FontWeight.Bold)
+//                            Text(text = data.wantedInfoUrl.toString())
+//                        }
+//                        Button(
+//                            onClick = {}
+//                        ) {
+//                            Text(text = "모바일링크", fontWeight = FontWeight.Bold)
+//                            Text(text = data.wantedMobileInfoUrl.toString())
+//                        }
 
 //                    val str: String = data.toString()
 //                    Text(text = str)
