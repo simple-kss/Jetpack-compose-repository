@@ -5,10 +5,13 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -27,10 +31,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.ApiManager
+import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.composables.TAG
 import com.learnandroid.loginapplication.data.JobInfoData
+import com.learnandroid.loginapplication.data.UserCertificateInfo
+import com.learnandroid.loginapplication.ui.theme.uGray2
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 
 // compose_version = '1.1.0-beta01'
@@ -50,6 +59,12 @@ fun JobSearchInfo(navController: NavController) {
     var textState = remember { mutableStateOf(TextFieldValue("")) }
     var jobState = remember { mutableStateListOf<JobInfoData>()}
 
+    val showDialog = remember { mutableStateOf(false) }
+    val dialogState by lazy { mutableStateOf(false) }
+
+    CountriesDialog(showDialog, textState)
+//    EmailVerifyLinkNoticeDialog(showDialog.value, onDismissRequest = {showDialog.value = false})
+
     Surface (
     ) {
         Column (
@@ -59,18 +74,38 @@ fun JobSearchInfo(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "구직정보 검색",
-                fontSize = 40.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.Black
-            )
+            Box(
+                Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "구직정보 검색",
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                )
+                Button(
+                    elevation = null,
+                    onClick = {
+                        showDialog.value = true
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = whiteBackground)
+                ) {
+                    Text(
+                        text = "내 자격증",
+                        color = uGray2
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(20.dp))
             SearchJobBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                hint = "Search...",
+                hint = "정보처리기사",
                 textState,
                 jobState
             ) {
@@ -280,3 +315,170 @@ fun JobInfoRow2(name : String) {
     }
 }
 
+
+
+@Composable
+fun CustomAlertDialog(
+    onDismissRequest: () -> Unit,
+    properties: DialogProperties = DialogProperties(),
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties
+    ) {
+        content()
+    }
+}
+
+
+
+@Composable
+private fun EmailVerifyLinkNoticeDialog(
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+) {
+    if (visible) {
+        CustomAlertDialog(onDismissRequest = { onDismissRequest() }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = Color.Blue)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .padding(horizontal = 24.dp),
+                    text = "hello",
+//                    style = Typography.Title18R.copy(color = ColorAsset.G1)
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .align(Alignment.End)
+                        .clickable {
+                            onDismissRequest()
+                        }
+                        .padding(12.dp),
+                    text = "StringAsset.OK",
+//                    style = Typography.Body14M.copy(color = ColorAsset.Primary)
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+
+@Composable
+fun CountriesDialog(dialogState: MutableState<Boolean>, textState: MutableState<TextFieldValue>) {
+    val readMyAcquire = FirebaseManager.read_my_acquire()
+
+    val list: List<String> = listOf("Kim", "Hong", "Park")
+
+//    val dialogState by lazy { mutableStateOf(false) }
+
+    if (dialogState.value) {
+        SingleSelectDialog(title = "hello",
+            optionsList = readMyAcquire,
+            defaultSelected = 0,
+            submitButtonText = "submit",
+            textState = textState,
+            onSubmitButtonClick = {
+                /**
+                 * Do whatever you need on button click
+                 */
+//                textState.value =
+            }
+        ) { dialogState.value = false }
+    }
+}
+
+@Composable
+fun SingleSelectDialog(
+    title: String,
+    optionsList: SnapshotStateList<UserCertificateInfo>,
+    defaultSelected: Int,
+    submitButtonText: String,
+    textState: MutableState<TextFieldValue>,
+    onSubmitButtonClick: (Int) -> Unit,
+    onDismissRequest: () -> Unit) {
+
+    val selectedOption = mutableStateOf(defaultSelected)
+
+    Dialog(
+        onDismissRequest = { onDismissRequest.invoke() }
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(300.dp)
+                .height(500.dp),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text(text = title)
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Column(
+                ) {
+                    for (item in optionsList) {
+                        RadioButton(item, optionsList.get(selectedOption.value).name) { item ->
+                            selectedOption.value = optionsList.indexOf(item)
+                            textState.value = TextFieldValue(item.name)
+                        }
+                    }
+                }
+//                LazyColumn(
+//                    items = optionsList,
+//                    modifier = Modifier
+//                        .height(500.dp)
+//                ) {
+//
+//                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(onClick = {
+                    onSubmitButtonClick.invoke(selectedOption.value)
+                    onDismissRequest.invoke()
+                },
+                    shape = MaterialTheme.shapes.medium) {
+                    Text(text = submitButtonText)
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun RadioButton(text: UserCertificateInfo, selectedValue: String,
+                onClickListener: (UserCertificateInfo) -> Unit) {
+    Row(Modifier
+        .fillMaxWidth()
+        .selectable(
+            selected = (text.name == selectedValue),
+            onClick = {
+                onClickListener(text)
+            }
+        )
+        .padding(horizontal = 16.dp)
+    ) {
+        RadioButton(
+            selected = (text.name == selectedValue),
+            onClick = {
+                onClickListener(text)
+            }
+        )
+        Text(
+            text = text.name,
+            style = MaterialTheme.typography.body1.merge(),
+            modifier = Modifier.padding(start = 16.dp)
+        )
+    }
+}

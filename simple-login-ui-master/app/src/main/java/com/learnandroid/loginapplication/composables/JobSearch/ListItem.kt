@@ -173,50 +173,50 @@ fun JobItem(data: JobInfoData, navController: NavController){
                         Log.d("oliver486", "oliver486(infoUrl): " + infoUrl)
                         Log.d("oliver486", "oliver486(wantedInfoUrl): " +
                                 data.wantedInfoUrl.toString())
-
-                        // https://stackoverflow.com/questions/65567412/jetpack-compose-text-hyperlink-some-section-of-the-text
-                        val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-                            val str = data.wantedInfoUrl.toString()
-                            val startIndex = 0
-                            val endIndex = str.length
-//                            val str = "Click this link to go to web site"
-//                            val startIndex = str.indexOf("link")
-//                            val endIndex = startIndex + 4
-                            append(str)
-                            addStyle(
-                                style = SpanStyle(
-                                    color = Color(0xff64B5F6),
-                                    fontSize = 18.sp,
-                                    textDecoration = TextDecoration.Underline
-                                ), start = startIndex, end = endIndex
-                            )
-                            // attach a string annotation that stores a URL to the text "link"
-                            addStringAnnotation(
-                                tag = "URL",
-                                annotation = data.wantedInfoUrl.toString(),
-//                                annotation = "http://github.com",
-                                start = startIndex,
-                                end = endIndex
-                            )
-                        }
-                        // UriHandler parse and opens URI inside AnnotatedString Item in Browse
                         val uriHandler = LocalUriHandler.current
 
-                        // Clickable text returns position of text that is clicked in onClick callback
-                        Text(text = "웹링크")
-                        ClickableText(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxWidth(),
-                            text = annotatedLinkString,
-                            onClick = {
-                                annotatedLinkString
-                                    .getStringAnnotations("URL", it, it)
-                                    .firstOrNull()?.let { stringAnnotation ->
-                                        uriHandler.openUri(stringAnnotation.item)
-                                    }
-                            }
-                        )
+//                        // https://stackoverflow.com/questions/65567412/jetpack-compose-text-hyperlink-some-section-of-the-text
+//                        val annotatedLinkString: AnnotatedString = buildAnnotatedString {
+//                            val str = data.wantedInfoUrl.toString()
+//                            val startIndex = 0
+//                            val endIndex = str.length
+////                            val str = "Click this link to go to web site"
+////                            val startIndex = str.indexOf("link")
+////                            val endIndex = startIndex + 4
+//                            append(str)
+//                            addStyle(
+//                                style = SpanStyle(
+//                                    color = Color(0xff64B5F6),
+//                                    fontSize = 18.sp,
+//                                    textDecoration = TextDecoration.Underline
+//                                ), start = startIndex, end = endIndex
+//                            )
+//                            // attach a string annotation that stores a URL to the text "link"
+//                            addStringAnnotation(
+//                                tag = "URL",
+//                                annotation = data.wantedInfoUrl.toString(),
+////                                annotation = "http://github.com",
+//                                start = startIndex,
+//                                end = endIndex
+//                            )
+//                        }
+//                        // UriHandler parse and opens URI inside AnnotatedString Item in Browse
+//
+//                        // Clickable text returns position of text that is clicked in onClick callback
+//                        Text(text = "웹링크")
+//                        ClickableText(
+//                            modifier = Modifier
+//                                .padding(16.dp)
+//                                .fillMaxWidth(),
+//                            text = annotatedLinkString,
+//                            onClick = {
+//                                annotatedLinkString
+//                                    .getStringAnnotations("URL", it, it)
+//                                    .firstOrNull()?.let { stringAnnotation ->
+//                                        uriHandler.openUri(stringAnnotation.item)
+//                                    }
+//                            }
+//                        )
 
                         val annotatedMobileLinkString: AnnotatedString = buildAnnotatedString {
                             val str = data.wantedMobileInfoUrl.toString()
