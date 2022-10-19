@@ -73,7 +73,7 @@ class ApiManager {
                             // 화면 출력을 담당하는 str에
                             // 응답 결과물 line을 저장.
                             reponse = line
-                            state.value = TextFieldValue("10")
+//                            state.value = TextFieldValue("")
                             list = parse(line) as List<JobInfoData>
                         }
                     }

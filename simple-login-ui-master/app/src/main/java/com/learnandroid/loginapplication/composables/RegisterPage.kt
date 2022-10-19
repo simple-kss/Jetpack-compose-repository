@@ -73,7 +73,6 @@ fun RegisterPage(navController: NavController) {
 //                contentDescription = "",
 //            )
 //        }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()

@@ -192,22 +192,26 @@ fun SearchJobBar(
     }
 ) {
     // 힌트는 디스플레이 되는거임.
-    var text by remember {
+    var text = remember {
         mutableStateOf("")
     }
     // true면 엠티스트링 으로 할거임
     var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
+
+    text.value = state.value.annotatedString.toString()
+
     Box(modifier = modifier) {
         // onValueChange는 텍스트 vlaue필드가 변경이되면 트리거되는 거임.
         BasicTextField(
-            value = text,
+            value = text.value,
             onValueChange = { value ->
                 // 이부분을 키보드 search로 클릭했을 때로 해야됨.
                 // 하지만 JobInfo에선 필요없음
                 // 검색 버튼 눌렀을때만, 업데이트 되게 해야됨.
-                text = value
+                state.value = TextFieldValue(value);
+//                text.value = value
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -220,12 +224,13 @@ fun SearchJobBar(
                 onDone = {
                     Log.d(TAG, "Done Click")
                     // 검색 버튼 눌렀을때만, 업데이트 되게 해야됨.
-                    state.value = TextFieldValue(text)
+                    // state.value = TextFieldValue(text.value)
 
                     // 이때 해당 value를 api로 쏴야함
                     // poc 체크.. 해서 callback 받아서, state.value가 바뀌어지면
                     // 해당 값이 바뀌어지는진
-                    ApiManager.sendApi(text, state, jobState)
+                    ApiManager.sendApi(text.value, state, jobState)
+                    state.value = TextFieldValue("")
                 }
             ),
             // 클릭했을 시 API를 쏴버리기. -> 그걸 state에 저장시켜야됨 string이든 뭐로든.
@@ -384,16 +389,17 @@ fun CountriesDialog(dialogState: MutableState<Boolean>, textState: MutableState<
 //    val dialogState by lazy { mutableStateOf(false) }
 
     if (dialogState.value) {
-        SingleSelectDialog(title = "hello",
+        SingleSelectDialog(title = "내 취득 자격증",
             optionsList = readMyAcquire,
             defaultSelected = 0,
-            submitButtonText = "submit",
+            submitButtonText = "선택",
             textState = textState,
-            onSubmitButtonClick = {
+            onSubmitButtonClick = { it, name ->
                 /**
                  * Do whatever you need on button click
                  */
-//                textState.value =
+                Log.d(TAG, "CERTICERTI2: " + textState.value)
+                textState.value = TextFieldValue(name.value)
             }
         ) { dialogState.value = false }
     }
@@ -406,10 +412,11 @@ fun SingleSelectDialog(
     defaultSelected: Int,
     submitButtonText: String,
     textState: MutableState<TextFieldValue>,
-    onSubmitButtonClick: (Int) -> Unit,
+    onSubmitButtonClick: (Int, MutableState<String>) -> Unit,
     onDismissRequest: () -> Unit) {
 
     val selectedOption = mutableStateOf(defaultSelected)
+    var selectedString: MutableState<String> = remember { mutableStateOf("") }
 
     Dialog(
         onDismissRequest = { onDismissRequest.invoke() }
@@ -429,7 +436,10 @@ fun SingleSelectDialog(
                     for (item in optionsList) {
                         RadioButton(item, optionsList.get(selectedOption.value).name) { item ->
                             selectedOption.value = optionsList.indexOf(item)
+                            // 아래의 로그가 찍히지 않음.
+                            selectedString.value = item.name
                             textState.value = TextFieldValue(item.name)
+                            Log.d(TAG, "CERTICERTI: " + textState.value)
                         }
                     }
                 }
@@ -444,14 +454,13 @@ fun SingleSelectDialog(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(onClick = {
-                    onSubmitButtonClick.invoke(selectedOption.value)
+                    onSubmitButtonClick.invoke(selectedOption.value, selectedString)
                     onDismissRequest.invoke()
                 },
                     shape = MaterialTheme.shapes.medium) {
                     Text(text = submitButtonText)
                 }
             }
-
         }
     }
 }
