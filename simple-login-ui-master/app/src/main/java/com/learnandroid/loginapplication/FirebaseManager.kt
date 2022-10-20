@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.ktx.Firebase
@@ -178,8 +179,11 @@ class FirebaseManager {
                         list.add(info)
                     }
                 } // collection end
+
+
 //            list.sortedWith(compareBy({ it.date }))
 //            list.sortWith(compareBy<ArticleInfo> { it.date })
+//            list.sortByDescending { it.date }
             return list
         }
 
@@ -421,6 +425,21 @@ class FirebaseManager {
                 }
         }
 
+        fun modify_nickname(value: String) {
+            val user = FirebaseManager.auth?.currentUser
+            val profileUpdates = userProfileChangeRequest {
+                displayName = value
+            }
+            user!!.updateProfile(profileUpdates)
+                .addOnCompleteListener { task ->
+                    Log.d(TAG, "addOnCompleteListener. " + user.displayName +
+                            user.displayName.toString())
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "User profile updated.")
+                    }
+                }
+        }
+
         fun login(email : String, password : String): Boolean {
             // 어떤 데이터를 읽어 올건지 생각해야함.
             // 해당데이터가 있는 지 확인해야함.
@@ -530,7 +549,6 @@ class FirebaseManager {
                 }
             return true
         }
-
     }
 }
 

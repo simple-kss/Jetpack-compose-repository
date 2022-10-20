@@ -1,7 +1,6 @@
 package com.learnandroid.loginapplication.composables.mypage
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,19 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.FirebaseManager
-import com.learnandroid.loginapplication.R
-import com.learnandroid.loginapplication.composables.CertiList
-import com.learnandroid.loginapplication.composables.SearchBar
 import com.learnandroid.loginapplication.ui.theme.uGray3
 import com.learnandroid.loginapplication.ui.theme.uGray4
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
@@ -40,15 +35,18 @@ fun ModifyMyinfo(navController: NavController) {
     val context = LocalContext.current
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
+    val nicknameValue = remember { mutableStateOf("") }
+
     val phoneValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
     val confirmPasswordValue = remember { mutableStateOf("") }
 
     val passwordVisibility = remember { mutableStateOf(false) }
     val confirmPasswordVisibility = remember { mutableStateOf(false) }
+
+    val focusManager = LocalFocusManager.current
+
     Surface(
-//        color = MaterialTheme.colors.background,
-//        modifier = Modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
@@ -74,92 +72,24 @@ fun ModifyMyinfo(navController: NavController) {
                 Spacer(modifier = Modifier.padding(20.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = { emailValue.value = it },
-                        label = { Text(text = "이메일", color = uGray4) },
-//                        placeholder = { Text(text = "Email Address") },
+                        value = nicknameValue.value,
+                        onValueChange = { nicknameValue.value = it },
+                        label = { Text(text = "변경할 닉네임", color = uGray4) },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth(0.8f),
-//                            .border(
-//                                width = 1.dp,
-//                                color = uGray
-//                            ),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = uGray3
                         )
                     )
-
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
-                        label = { Text(text = "비밀번호", color = uGray4) },
-//                        placeholder = { Text(text = "Password") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f),
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Clear,
-                                    contentDescription = "Clear"
-                                )
-                            }
-                        },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = uGray3
-                        ),
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation()
-                    )
-
-                    OutlinedTextField(
-                        value = confirmPasswordValue.value,
-                        onValueChange = { confirmPasswordValue.value = it },
-                        label = { Text(text = "비밀번호 확인", color = uGray4) },
-//                        placeholder = { Text(text = "Confirm Password") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f),
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                confirmPasswordVisibility.value = !confirmPasswordVisibility.value
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Clear,
-                                    contentDescription = "Clear"
-                                )
-                            }
-                        },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = uGray3
-                        ),
-                        visualTransformation = if (confirmPasswordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation()
-                    )
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(
                         onClick = {
-                            Toast.makeText(context, "Button 클릭",
+                            Toast.makeText(context, "닉네임이 \"" + nicknameValue.value
+                                    + "\"로 변경되었습니다.",
                                 Toast.LENGTH_LONG).show()
-                            // TODO: confirm 비밀번호 틀렸을 때 처리 나중에 하기
-
-                            // 새로 계정 만들기
-                            FirebaseManager.auth?.createUserWithEmailAndPassword(emailValue.value,
-                                confirmPasswordValue.value)
-                                ?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        // Login, 아이디와 패스워드가 맞았을 때
-                                        Toast.makeText(context, "계정 생성 완료",
-                                            Toast.LENGTH_LONG).show()
-                                    } else {
-                                        // Show the error message, 아이디와 패스워드가 틀렸을 때
-                                        Toast.makeText(context, task.exception?.message,
-                                            Toast.LENGTH_LONG).show()
-                                    }
-                                }
+                            FirebaseManager.modify_nickname(nicknameValue.value);
+                            focusManager.clearFocus()
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.8f)

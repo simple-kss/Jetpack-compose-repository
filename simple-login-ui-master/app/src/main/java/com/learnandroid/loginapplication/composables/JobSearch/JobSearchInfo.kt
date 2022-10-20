@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -200,6 +201,7 @@ fun SearchJobBar(
         mutableStateOf(hint != "")
     }
 
+    val focusManager = LocalFocusManager.current
     text.value = state.value.annotatedString.toString()
 
     Box(modifier = modifier) {
@@ -231,6 +233,7 @@ fun SearchJobBar(
                     // 해당 값이 바뀌어지는진
                     ApiManager.sendApi(text.value, state, jobState)
                     state.value = TextFieldValue("")
+                    focusManager.clearFocus()
                 }
             ),
             // 클릭했을 시 API를 쏴버리기. -> 그걸 state에 저장시켜야됨 string이든 뭐로든.

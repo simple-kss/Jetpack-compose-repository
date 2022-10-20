@@ -25,6 +25,8 @@ import com.learnandroid.loginapplication.ui.theme.uGray2
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.Comparator
 
 @Composable
 fun CommunityPage(navController: NavController) {
@@ -72,6 +74,10 @@ fun CommunityPage(navController: NavController) {
             )
 
             var articles = FirebaseManager.read_articles()
+            // 정렬해야함.
+//            val comparator: Comparator<ArticleInfo> = compareBy<ArticleInfo> { it.date }
+//            articles.sortByDescending { it.date }
+
             LazyColumnWithArticles(articles, navController)
             // 이거로 레이지컬럼 뿌려저야댐
             // https://www.youtube.com/watch?v=V-3sLO_TWl0&ab_channel=HoodLab
@@ -82,7 +88,6 @@ fun CommunityPage(navController: NavController) {
 @Composable
 fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navController: NavController) {
     LazyColumn(
-
         modifier = Modifier
             .padding(vertical = 4.dp)
             .background(whiteBackground),
@@ -112,7 +117,6 @@ fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navControll
 @Composable
 fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd hh-mm-ss")
-
     Card(
 //        elevation = 0.dp,
 //        backgroundColor = Color.White,
