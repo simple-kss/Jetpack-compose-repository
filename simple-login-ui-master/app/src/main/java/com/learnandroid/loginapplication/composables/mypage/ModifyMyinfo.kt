@@ -76,11 +76,12 @@ fun ModifyMyinfo(navController: NavController) {
                         onValueChange = { nicknameValue.value = it },
                         label = { Text(text = "변경할 닉네임", color = uGray4) },
                         singleLine = true,
+                        textStyle = TextStyle(fontWeight = FontWeight.Bold,
+                            color = Color.Black),
                         modifier = Modifier
                             .fillMaxWidth(0.8f),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = uGray3
-                        )
+                            unfocusedBorderColor = uGray3)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(

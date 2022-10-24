@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.data.ArticleInfo
@@ -271,6 +272,74 @@ class FirebaseManager {
                             }
                 }
             } // collection end
+        }
+
+        fun delete_my_interested(
+            certificateName: String,
+            list: SnapshotStateList<UserCertificateInfo>,
+            deleteCheck: MutableState<Boolean>,
+
+            ) {
+            val userEmail = auth?.currentUser?.email
+            var found = false
+            var id: String? = null
+
+            Log.d(TAG, "delete_my_interested called" + certificateName)
+            if (certificateName == null) {
+                Log.e(TAG, "certificateName error")
+            }
+            Log.d(TAG, "write_my_interested called")
+
+            // 중복검사
+            // https://stackoverflow.com/questions/51054114/`firebase`-cloud-firestore-query-whereequalto-for-reference
+            firestore.collection("interested")
+                .whereEqualTo("member_email", userEmail)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        Log.d(TAG, "중복검사 ${document.id} => ${document.data} 추가정보: "
+                                + document.data.get("certificated_name") + ", " + certificateName)
+
+                        if (certificateName.equals(document.data.get("certificated_name"))) {
+                            found = true
+                            id = document.id
+                            Log.d(TAG, "이미 들어가있는 값입니다. (값 찾음)" + found)
+                        }
+                        else {
+                            Log.d(TAG, "새로운 값 입니다.")
+                        }
+                    }
+
+                    if (found) {
+                        // 데이터 삭제하기
+                        var interestedInfo = hashMapOf(
+                            "member_email" to userEmail,
+                            "certificated_name" to certificateName,
+
+                        )
+
+                        id?.let {
+                            firestore.collection("interested")
+                                .document(it)
+                                .delete()
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "정상적으로 삭제 완료")
+                                    deleteCheck.value = true
+//                                    list = read_my_interested()
+                                }
+                        }
+
+                        // 여기서 interested 테이블 이름
+//                        firestore.collection("interested")
+//                            .add(interestedInfo)
+//                            .addOnSuccessListener { documentReference ->
+//                                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                            }
+//                            .addOnFailureListener { e ->
+//                                Log.w(TAG, "Error adding document", e)
+//                            }
+                    }
+                } // collection end
         }
 
         fun write_my_acquire(

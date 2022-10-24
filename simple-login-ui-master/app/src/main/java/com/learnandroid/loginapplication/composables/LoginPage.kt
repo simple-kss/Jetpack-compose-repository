@@ -1,5 +1,6 @@
 package com.learnandroid.loginapplication.composables
 
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -12,9 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.R
 import com.learnandroid.loginapplication.ui.theme.*
@@ -50,6 +50,9 @@ fun LoginPage(navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    val findPassword = remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -184,9 +187,72 @@ fun LoginPage(navController: NavController) {
                         })
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
+                    Text(
+                        text = "비밀번호를 잊으셨나요?",
+                        color = uGray3,
+                        modifier = Modifier.clickable(onClick = {
+                            findPassword.value = true
+                        })
+                    )
                 }
             }
         }
+    }
+
+    if (findPassword.value) {
+        AlertDialog(
+            onDismissRequest = {
+                findPassword.value = false
+            },
+            title = {
+                Text(text = "비밀번호를 찾으실 이메일을 입력해주세요.")
+            },
+            text = {
+                Column {
+                    TextField(
+                        value = text,
+                        onValueChange = { text = it }
+                    )
+                    // Text("Custom Text")
+                    // 추후에 Checkbox가 필요할 수 도 있으니 우선 주석처리로 남겨놓음.
+                    // Checkbox(checked = false, onCheckedChange = {})
+                }
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            FirebaseManager.auth?.sendPasswordResetEmail(text.toString())
+                            Toast.makeText(context, "로그인 완료", Toast.LENGTH_LONG).show()
+
+
+//                            val user = FirebaseManager.auth?.currentUser
+//
+//                            val profileUpdates = userProfileChangeRequest {
+//                                displayName = text
+//                                photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
+//                            }
+//
+//                            user!!.updateProfile(profileUpdates)
+//                                .addOnCompleteListener { task ->
+//                                    Log.d(TAG, "addOnCompleteListener. " + user.displayName +
+//                                            user.displayName.toString())
+//                                    if (task.isSuccessful) {
+//                                        Log.d(TAG, "User profile updated.")
+//                                    }
+//                                }
+                            findPassword.value = false
+                        }
+                    ) {
+                        Text("Dismiss")
+                    }
+                }
+            }
+        )
     }
 }
 

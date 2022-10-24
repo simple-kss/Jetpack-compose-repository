@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.UserCertificateInfo
 import com.learnandroid.loginapplication.ui.theme.primaryColor
+import com.learnandroid.loginapplication.ui.theme.uGray2
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -33,11 +35,15 @@ fun MyPage(navController: NavController) {
 }
 // https://firebase.google.com/docs/auth/web/manage-users#get_a_users_profile
 
+var deleteCheck = mutableStateOf(false)
+
 @Composable
 // navController: NavController
 fun contentItems(navController: NavController) {
     var interested = remember { mutableStateListOf<UserCertificateInfo>() }
     var acquire = remember { mutableStateListOf<UserCertificateInfo>() }
+
+//        mutableStateListOf<UserCertificateInfo>() }
 
     var user = Firebase.auth.currentUser
     var displayName: String? = null
@@ -158,7 +164,7 @@ fun contentItems(navController: NavController) {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
                         acquire = FirebaseManager.read_my_acquire()
-                        interestedColumnList(acquire)
+                        interestedColumnList(acquire, false)
 //                        interestedList(acquire)
 //                        Row(
 //                            modifier = Modifier
@@ -200,7 +206,13 @@ fun contentItems(navController: NavController) {
                         // 여기서 파이어베이스에서 가져와서 뿌려줘야함.
                         // 레이지컬럼으로 바로해줘야함.
                         interested = FirebaseManager.read_my_interested()
-                        interestedColumnList(interested)
+                        if (deleteCheck.value) {
+                            interested = FirebaseManager.read_my_interested()
+                            deleteCheck.value = false
+                        } else {
+                            deleteCheck.value = false
+                        }
+                        interestedColumnList(interested, true)
 //                        interestedList(interested)
                     }
                 }
@@ -210,7 +222,10 @@ fun contentItems(navController: NavController) {
 }
 
 @Composable
-fun interestedColumnList(list: List<UserCertificateInfo>) {
+fun interestedColumnList(
+    list: SnapshotStateList<UserCertificateInfo>,
+    interest: Boolean
+) {
     Column(
         modifier = Modifier
             .padding(vertical = 4.dp)
@@ -220,37 +235,39 @@ fun interestedColumnList(list: List<UserCertificateInfo>) {
 //            .verticalScroll(state),
     ) {
         for (info in list) {
-            interestedRow(info)
+            interestedRow(info, list, interest)
         }
     }
 
 }
 
-@Composable
-fun interestedList(list: List<UserCertificateInfo>) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(vertical = 4.dp)
-            .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
-            .fillMaxWidth()
-            .background(primaryColor),
-        contentPadding = PaddingValues(16.dp)) {
-//        var list = FirebaseManager.read_my_interested()
-        Log.d(TAG, "!!!!!!!!  list.size: " + list.size);
-        itemsIndexed(
-             list
-//            listOf(100, 200, 300)
-        ) { index, item ->
-            interestedRow(order = item)
-        }
-        // 버튼 2개 (취득, 관심) 해야함.
-    }
-    // val readMyInterested = FirebaseManager.read_my_interested()
-}
+//@Composable
+//fun interestedList(list: List<UserCertificateInfo>) {
+//    LazyColumn(
+//        modifier = Modifier
+//            .padding(vertical = 4.dp)
+//            .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
+//            .fillMaxWidth()
+//            .background(primaryColor),
+//        contentPadding = PaddingValues(16.dp)) {
+////        var list = FirebaseManager.read_my_interested()
+//        Log.d(TAG, "!!!!!!!!  list.size: " + list.size);
+//        itemsIndexed(
+//             list
+////            listOf(100, 200, 300)
+//        ) { index, item ->
+//            interestedRow(order = item)
+//        }
+//        // 버튼 2개 (취득, 관심) 해야함.
+//    }
+//    // val readMyInterested = FirebaseManager.read_my_interested()
+//}
 
 @Composable
 fun interestedRow(
-    order: UserCertificateInfo
+    order: UserCertificateInfo,
+    list: SnapshotStateList<UserCertificateInfo>,
+    interest: Boolean
 //    order: Int
 ) {
     val name = order.name
@@ -280,7 +297,27 @@ fun interestedRow(
                         text = " (" + df.format(order.date) + ")"
                     )
                 }
-//                            Text("" + order)
+
+                if (interest) {
+                    Button(
+//                    modifier = Modifier
+//                        .align(Alignment.TopEnd),
+
+//                    elevation = null,
+                        onClick = {
+                            FirebaseManager.delete_my_interested(order.name, list, deleteCheck)
+                        },
+//                    modifier = Modifier
+//                        .align(Alignment.TopEnd),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = whiteBackground)
+                    ) {
+                        Text(
+                            text = "삭제",
+                            color = uGray2
+                        )
+                    }
+                }
+
             }
         }
     }
