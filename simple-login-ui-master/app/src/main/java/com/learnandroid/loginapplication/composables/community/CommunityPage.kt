@@ -74,9 +74,21 @@ fun CommunityPage(navController: NavController) {
             )
 
             var articles = FirebaseManager.read_articles()
+
             // 정렬해야함.
 //            val comparator: Comparator<ArticleInfo> = compareBy<ArticleInfo> { it.date }
-//            articles.sortByDescending { it.date }
+
+//            Log.d(TAG, "whywhywhywhy!!2asdasd " + articles.size)
+//
+//            Log.d(TAG, "whywhywhywhy!!1 ")
+//            articles.sortedBy { it.date }
+//            Log.d(TAG, "whywhywhywhy!!2 " + articles.size)
+//
+//            for(a in articles) {
+//                Log.d(TAG, "item oliver : " + a)
+//            }
+
+//            articles.sortBy { it.date } 이거해도안됨
 
             LazyColumnWithArticles(articles, navController)
             // 이거로 레이지컬럼 뿌려저야댐
@@ -86,7 +98,7 @@ fun CommunityPage(navController: NavController) {
 }
 
 @Composable
-fun LazyColumnWithArticles(articles: SnapshotStateList<ArticleInfo>, navController: NavController) {
+fun LazyColumnWithArticles(articles: List<ArticleInfo>, navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .padding(vertical = 4.dp)

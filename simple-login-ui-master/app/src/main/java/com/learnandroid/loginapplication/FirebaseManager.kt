@@ -179,6 +179,7 @@ class FirebaseManager {
                         )
                         list.add(info)
                     }
+                    list.sortByDescending { it.date }
                 } // collection end
 
 
