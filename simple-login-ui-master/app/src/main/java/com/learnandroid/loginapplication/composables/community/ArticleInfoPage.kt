@@ -104,7 +104,7 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                             text = "작성자: " + it,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(30.dp))
-                                .background(uGray4)
+                                .background(whiteBackground)
                                 .fillMaxWidth()
                                 .height(50.dp)
                                 .padding(10.dp)
@@ -221,35 +221,37 @@ fun CommentCard(order: Comment) {
 //            .height(50.dp)
 //    ) {
 
-        Button(
-            elevation = null,
-            colors = ButtonDefaults.buttonColors(uGray4),
+        Column (
+//            elevation = null,
+//            colors = ButtonDefaults.buttonColors(uGray4),
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
                 .fillMaxWidth()
                 .height(100.dp)
-//                .background(uGray4)
+                .background(uGray4)
                 .padding(10.dp),
-            onClick = {}
+//            onClick = {}
         ) {
             ProvideTextStyle(TextStyle(color = Color.Black)) {
-                Column(
-                    horizontalAlignment = Alignment.Start
-                ) {
+//                Column(
+//                    horizontalAlignment = Alignment.
+//                ) {
                     Text(
-                        text = "${order.name}",
+                        text = "작성자: ${order.name}",
+                        textAlign = TextAlign.Left,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 2
+                        maxLines = 1
                     )
                     Text(
                         text = "${order.contents}",
-                        maxLines = 2
+                        textAlign = TextAlign.Left,
+                        maxLines = 1
                     )
 //                    Text(
 //                        text = df.format(order.date),
 //                        color = Color.LightGray
 //                    )
-                }
+//                }
             }
         }
 //    }

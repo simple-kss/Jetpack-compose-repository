@@ -49,14 +49,7 @@ fun ArticleWritePage(navController: NavController) {
                     .fillMaxWidth()
                     .height(30.dp)
                     .background(uGray4)
-            ) {
-                Text(
-                    text = "제목을 입력해주세요.",
-                    color = uGray2,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            }
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
             BasicTextField(
@@ -64,14 +57,19 @@ fun ArticleWritePage(navController: NavController) {
                 onValueChange = { value ->
                     contents = value
                 },
+                decorationBox = { innerTextField ->
+                    if (contents.isEmpty()) {
+                        Text("Label")
+                    }
+                    innerTextField()  //<-- Add this
+                },
                 modifier = Modifier
                     .clip(RoundedCornerShape(15.dp))
                     .fillMaxWidth()
                     .height(300.dp)
                     .background(uGray4),
-            ) {
+            )
 
-            }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
