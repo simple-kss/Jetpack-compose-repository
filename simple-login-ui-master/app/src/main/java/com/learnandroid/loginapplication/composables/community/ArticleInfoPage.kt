@@ -107,7 +107,7 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                                 .background(uGray4)
                                 .fillMaxWidth()
                                 .height(50.dp)
-                                .padding(5.dp)
+                                .padding(10.dp)
                         )
                     }
 //                    readArticleById.value.email?.let {
@@ -139,11 +139,11 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                         Text(
                             text = it,
                             modifier = Modifier
-//                                .padding(5.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .fillMaxWidth()
                                 .height(300.dp)
                                 .background(uGray4)
+                                .padding(10.dp)
                         )
                     }
                 }
@@ -162,8 +162,8 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                     .fillMaxWidth()
                     .height(100.dp)
                     .background(uGray4)
-            ) {
-            }
+                    .padding(10.dp)
+            )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
@@ -212,17 +212,24 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
 @Composable
 fun CommentCard(order: Comment) {
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd hh-mm-ss")
-    Card(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxWidth()
-            .height(50.dp)
-    ) {
+    Spacer(modifier = Modifier.height(10.dp))
+//    Card(
+//        modifier = Modifier
+//            .background(uGray4)
+////            .padding(20.dp)
+////            .fillMaxWidth()
+//            .height(50.dp)
+//    ) {
+
         Button(
             elevation = null,
-            colors = ButtonDefaults.buttonColors(whiteBackground),
+            colors = ButtonDefaults.buttonColors(uGray4),
             modifier = Modifier
-                .background(whiteBackground),
+                .clip(RoundedCornerShape(30.dp))
+                .fillMaxWidth()
+                .height(100.dp)
+//                .background(uGray4)
+                .padding(10.dp),
             onClick = {}
         ) {
             ProvideTextStyle(TextStyle(color = Color.Black)) {
@@ -245,5 +252,6 @@ fun CommentCard(order: Comment) {
                 }
             }
         }
-    }
+//    }
+    Spacer(modifier = Modifier.height(10.dp))
 }

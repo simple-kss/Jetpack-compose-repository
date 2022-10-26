@@ -22,7 +22,6 @@ class ApiManager {
         lateinit var list: List<JobInfoData>
 
         fun sendApi(certiName: String,
-                    state: MutableState<TextFieldValue>,
                     jobState: SnapshotStateList<JobInfoData>
         )  {
 
@@ -49,7 +48,7 @@ class ApiManager {
 
             var strUrl = "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?" +
                     "authKey=WNL1POQRW61BKHAAN8XJJ2VR1HK" +
-                    "&returnType=xml&startPage=1&display=10&callTp=L&region=11000" +
+                    "&returnType=xml&startPage=1&display=30&callTp=L&region=11000" +
                     "&keyword==" + result
             val url = URL(strUrl)
             // Debug로그에 출력

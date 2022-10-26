@@ -63,7 +63,7 @@ fun JobSearchInfo(navController: NavController) {
     val showDialog = remember { mutableStateOf(false) }
     val dialogState by lazy { mutableStateOf(false) }
 
-    CountriesDialog(showDialog, textState)
+    CountriesDialog(showDialog, textState, jobState)
 //    EmailVerifyLinkNoticeDialog(showDialog.value, onDismissRequest = {showDialog.value = false})
 
     Surface (
@@ -231,7 +231,7 @@ fun SearchJobBar(
                     // 이때 해당 value를 api로 쏴야함
                     // poc 체크.. 해서 callback 받아서, state.value가 바뀌어지면
                     // 해당 값이 바뀌어지는진
-                    ApiManager.sendApi(text.value, state, jobState)
+                    ApiManager.sendApi(text.value, jobState)
                     state.value = TextFieldValue("")
                     focusManager.clearFocus()
                 }
@@ -380,15 +380,15 @@ private fun EmailVerifyLinkNoticeDialog(
 
 
 
-
-
-
 @Composable
-fun CountriesDialog(dialogState: MutableState<Boolean>, textState: MutableState<TextFieldValue>) {
+fun CountriesDialog(
+    dialogState: MutableState<Boolean>,
+    textState: MutableState<TextFieldValue>,
+    jobState: SnapshotStateList<JobInfoData>
+) {
     val readMyAcquire = FirebaseManager.read_my_acquire()
 
-    val list: List<String> = listOf("Kim", "Hong", "Park")
-
+//    val list: List<String> = listOf("Kim", "Hong", "Park")
 //    val dialogState by lazy { mutableStateOf(false) }
 
     if (dialogState.value) {
@@ -402,7 +402,12 @@ fun CountriesDialog(dialogState: MutableState<Boolean>, textState: MutableState<
                  * Do whatever you need on button click
                  */
                 Log.d(TAG, "CERTICERTI2: " + textState.value)
-                textState.value = TextFieldValue(name.value)
+//                textState.value = TextFieldValue(name.value)
+                textState.value = TextFieldValue("")
+
+                ApiManager.sendApi(name.value, jobState)
+//                state.value = TextFieldValue("")
+//                focusManager.clearFocus()
             }
         ) { dialogState.value = false }
     }
