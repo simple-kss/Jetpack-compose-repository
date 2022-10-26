@@ -12,14 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.FirebaseManager
-import com.learnandroid.loginapplication.ui.theme.primaryColor
-import com.learnandroid.loginapplication.ui.theme.uGray1
-import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import com.learnandroid.loginapplication.ui.theme.*
 
 // 게시글 ID
 // 이메일
@@ -49,8 +48,16 @@ fun ArticleWritePage(navController: NavController) {
                     .clip(RoundedCornerShape(20.dp))
                     .fillMaxWidth()
                     .height(30.dp)
-                    .background(uGray1)
-            )
+                    .background(uGray4)
+            ) {
+                Text(
+                    text = "제목을 입력해주세요.",
+                    color = uGray2,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
             BasicTextField(
                 value = contents,
@@ -61,8 +68,10 @@ fun ArticleWritePage(navController: NavController) {
                     .clip(RoundedCornerShape(15.dp))
                     .fillMaxWidth()
                     .height(300.dp)
-                    .background(uGray1)
-            )
+                    .background(uGray4),
+            ) {
+
+            }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {

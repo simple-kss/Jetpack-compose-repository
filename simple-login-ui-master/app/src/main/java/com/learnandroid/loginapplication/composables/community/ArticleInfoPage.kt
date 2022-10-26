@@ -17,21 +17,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.data.Comment
-import com.learnandroid.loginapplication.ui.theme.primaryColor
-import com.learnandroid.loginapplication.ui.theme.uGray1
-import com.learnandroid.loginapplication.ui.theme.whiteBackground
+import com.learnandroid.loginapplication.ui.theme.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 @Composable
 fun ArticleInfoPage(docId: String, navController: NavController) {
     val readArticleById = remember { mutableStateOf(
-        ArticleInfo("5", "6", "7", "8", null))
+        ArticleInfo("5", "6", "7", "8", "1", null))
     }
 //    val readArticleById:ArticleInfo = remember { mutableStateOf(null) }
 
@@ -56,6 +57,36 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                 .padding(10.dp)
                 .verticalScroll(scrollState)
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                Modifier.fillMaxWidth()
+            ) {
+                readArticleById.value.title?.let {
+                    Text(
+                        text = it,
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                    )
+                }
+//                Button(
+//                    elevation = null,
+//                    onClick = {navController.navigate("article_write_page")},
+//                    modifier = Modifier
+//                        .align(Alignment.TopEnd),
+//                    colors = ButtonDefaults.buttonColors(backgroundColor = whiteBackground)
+//                ) {
+//                    Text(
+//                        text = "글작성",
+//                        color = uGray2
+//                    )
+//                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+
+
             ProvideTextStyle(TextStyle(color = Color.Black)) {
 //                Text(
 //                    text = id,
@@ -68,39 +99,51 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
 //                Spacer(modifier = Modifier.height(10.dp))
 
                 if (readArticleById.value != null) {
-                    readArticleById.value.email?.let {
+                    readArticleById.value.name?.let {
                         Text(
-                            text = it,
+                            text = "작성자: " + it,
                             modifier = Modifier
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(uGray4)
                                 .fillMaxWidth()
                                 .height(50.dp)
                                 .padding(5.dp)
-                                .background(uGray1)
-                                .clip(RoundedCornerShape(20.dp))
                         )
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    readArticleById.value.title?.let {
-                        Text(
-                            text = it,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp)
-                                .padding(5.dp)
-                                .background(uGray1)
-                                .clip(RoundedCornerShape(20.dp))
-                        )
-                    }
+//                    readArticleById.value.email?.let {
+//                        Text(
+//                            text = it,
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .height(50.dp)
+//                                .padding(5.dp)
+//                                .background(uGray1)
+//                                .clip(RoundedCornerShape(20.dp))
+//                        )
+//                    }
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    readArticleById.value.title?.let {
+//                        Text(
+//                            text = it,
+//                            modifier = Modifier
+////                                .padding(5.dp)
+//                                .clip(RoundedCornerShape(30.dp))
+//                                .fillMaxWidth()
+//                                .height(50.dp)
+//                                .background(uGray4)
+//
+//                        )
+//                    }
                     Spacer(modifier = Modifier.height(10.dp))
                     readArticleById.value.contents?.let {
                         Text(
                             text = it,
                             modifier = Modifier
+//                                .padding(5.dp)
+                                .clip(RoundedCornerShape(20.dp))
                                 .fillMaxWidth()
                                 .height(300.dp)
-                                .padding(5.dp)
-                                .background(uGray1)
-                                .clip(RoundedCornerShape(20.dp))
+                                .background(uGray4)
                         )
                     }
                 }
@@ -118,8 +161,9 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
                     .clip(RoundedCornerShape(15.dp))
                     .fillMaxWidth()
                     .height(100.dp)
-                    .background(uGray1)
-            )
+                    .background(uGray4)
+            ) {
+            }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
@@ -168,7 +212,6 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
 @Composable
 fun CommentCard(order: Comment) {
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd hh-mm-ss")
-
     Card(
         modifier = Modifier
             .padding(20.dp)
@@ -187,13 +230,18 @@ fun CommentCard(order: Comment) {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "${order.contents}",
+                        text = "${order.name}",
+                        fontWeight = FontWeight.Bold,
                         maxLines = 2
                     )
                     Text(
-                        text = df.format(order.date),
-                        color = Color.LightGray
+                        text = "${order.contents}",
+                        maxLines = 2
                     )
+//                    Text(
+//                        text = df.format(order.date),
+//                        color = Color.LightGray
+//                    )
                 }
             }
         }

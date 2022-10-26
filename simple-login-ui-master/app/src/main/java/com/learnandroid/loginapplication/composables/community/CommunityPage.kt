@@ -128,7 +128,7 @@ fun LazyColumnWithArticles(articles: List<ArticleInfo>, navController: NavContro
 
 @Composable
 fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
-    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd hh-mm-ss")
+    val df: DateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
     Card(
 //        elevation = 0.dp,
 //        backgroundColor = Color.White,

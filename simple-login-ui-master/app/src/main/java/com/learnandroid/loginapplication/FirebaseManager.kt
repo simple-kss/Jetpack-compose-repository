@@ -162,6 +162,7 @@ class FirebaseManager {
                         // CertificateInfo
                         var id = document.id
                         var member_email = document.data.get("member_email")
+                        var member_name = document.data.get("member_name")
                         var title = document.data.get("title")
                         var contents = document.data.get("contents")
                         var date = document.getTimestamp("date")?.toDate()
@@ -169,6 +170,7 @@ class FirebaseManager {
                         var info : ArticleInfo = ArticleInfo(
                             id,
                             member_email as String,
+                            member_name as String,
                             title as String,
                             contents as String,
                             date as Date
@@ -203,12 +205,14 @@ class FirebaseManager {
                         // CertificateInfo
                         var documentId = document.data.get("document_id")
                         var member_email = document.data.get("member_email")
+                        var member_name = document.data.get("member_name")
                         var contents = document.data.get("contents")
                         var date = document.getTimestamp("date")?.toDate()
 
                         var comment : Comment = Comment(
                             documentId as String,
                             member_email as String,
+                            member_name as String,
                             contents as String,
                             date as Date
                         )
@@ -439,6 +443,7 @@ class FirebaseManager {
 //            var currentDataWithFormat = df.format(currentDate)
 
             val userEmail = auth?.currentUser?.email
+            val name = auth?.currentUser?.displayName
             if (title == null) {
                 Log.e(TAG, "acquire error")
             }
@@ -449,6 +454,7 @@ class FirebaseManager {
             // 데이터 쓰기
             var articleInfo = hashMapOf(
                 "member_email" to userEmail,
+                "member_name" to name,
                 "title" to title,
                 "contents" to contents,
                 "date" to currentDate,
@@ -468,6 +474,7 @@ class FirebaseManager {
             var currentDate = Date()
 
             val userEmail = auth?.currentUser?.email
+            val name = auth?.currentUser?.displayName
             if (contents == null) {
                 Log.e(TAG, "contents error")
                 return
@@ -481,6 +488,7 @@ class FirebaseManager {
             // 데이터 쓰기
             var commentInfo = hashMapOf(
                 "member_email" to userEmail,
+                "member_name" to name,
                 "document_id" to documentId,
                 "contents" to contents,
                 "date" to currentDate,
@@ -570,6 +578,7 @@ class FirebaseManager {
                         // CertificateInfo
                         var id = document.id
                         var member_email = document.data.get("member_email")
+                        var member_name = document.data.get("member_name")
                         var title = document.data.get("title")
                         var contents = document.data.get("contents")
                         var date = document.getTimestamp("date")?.toDate()
@@ -577,6 +586,7 @@ class FirebaseManager {
                         readArticleById.value = ArticleInfo(
                             id,
                             member_email as String,
+                            member_name as String,
                             title as String,
                             contents as String,
                             date as Date
