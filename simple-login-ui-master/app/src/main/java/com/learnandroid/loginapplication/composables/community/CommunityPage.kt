@@ -3,17 +3,22 @@ package com.learnandroid.loginapplication.composables
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.learnandroid.loginapplication.FirebaseManager
 import com.learnandroid.loginapplication.data.ArticleInfo
 import com.learnandroid.loginapplication.ui.theme.uGray2
+import com.learnandroid.loginapplication.ui.theme.uGray4
 import com.learnandroid.loginapplication.ui.theme.whiteBackground
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -138,42 +144,90 @@ fun KotlinWorldCard(order: ArticleInfo, navController: NavController) {
 //            .border(width = 4.dp, color = Color.Black)
             .fillMaxWidth()
             .height(100.dp)
-
+            .clickable{
+                navController.navigate("ArticleInfoPage/${order.id}")
+            }
     ) {
-        Column(
-            horizontalAlignment = Alignment.Start,
+        Row(
             modifier = Modifier
-                .background(whiteBackground),
+                .background(whiteBackground)
         ) {
-            Button(
-                elevation = null,
-                colors = ButtonDefaults.buttonColors(whiteBackground),
+            Box(
                 modifier = Modifier
-                    .background(whiteBackground),
-                onClick = {
-                    navController.navigate("ArticleInfoPage/${order.id}")
-                }
+                    .width(100.dp)
+                    .height(100.dp)
+                    .padding(15.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(uGray4),
+
+//                colors = ButtonDefaults.buttonColors(uGray4),
             ) {
-                ProvideTextStyle(TextStyle(color = Color.Black)) {
-                    Column(
-                    ) {
+
+            }
+            Column(
+
+            ) {
 //                    Text("${order.id}")
 //                    Text("${order.email}")
-                        Text("${order.title}",
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        Text(
-                            text = "${order.contents}",
-                            maxLines = 2
-                        )
-                        Text(
-                            text = df.format(order.date),
-                            color = Color.LightGray
-                        )
-                    }
-                }
+                Text("${order.title}",
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "${order.contents}",
+                    color = Color.Black,
+                    maxLines = 2
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = df.format(order.date),
+                    color = Color.LightGray,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Right
+                )
             }
         }
+
+
+
+//        Column(
+//            horizontalAlignment = Alignment.Start,
+//            modifier = Modifier
+//                .background(whiteBackground),
+//        ) {
+//            Button(
+//                elevation = null,
+//                colors = ButtonDefaults.buttonColors(whiteBackground),
+//                modifier = Modifier
+//                    .background(whiteBackground),
+//                onClick = {
+//                    navController.navigate("ArticleInfoPage/${order.id}")
+//                }
+//            ) {
+//                ProvideTextStyle(TextStyle(color = Color.Black)) {
+//                    Column(
+//                    ) {
+////                    Text("${order.id}")
+////                    Text("${order.email}")
+//
+//                        Text("${order.title}",
+//                            fontWeight = FontWeight.ExtraBold
+//                        )
+//                        Text(
+//                            text = "${order.contents}",
+//                            maxLines = 2
+//                        )
+//                        Text(
+//                            text = df.format(order.date),
+//                            color = Color.LightGray
+//                        )
+//                    }
+//                }
+//            }
+//        }
     }
 }
 

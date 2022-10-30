@@ -152,18 +152,24 @@ fun ArticleInfoPage(docId: String, navController: NavController) {
 
             Spacer(modifier = Modifier.height(30.dp))
             // 입력하게끔 하기
-            BasicTextField(
-                value = comment,
-                onValueChange = { value ->
-                    comment = value
-                },
-                modifier = Modifier
-                    .clip(RoundedCornerShape(15.dp))
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(uGray4)
-                    .padding(10.dp)
-            )
+
+            // 아래의 provi
+            ProvideTextStyle(TextStyle(color = Color.Black)) {
+                TextField(
+                    value = comment,
+                    onValueChange = { value ->
+                        comment = value
+                    },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(15.dp))
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(uGray5)
+                        .padding(10.dp),
+                    placeholder = { Text(text = "댓글을 입력하세요.", color = uGray3)}
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
